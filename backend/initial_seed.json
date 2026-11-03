@@ -1,0 +1,1154 @@
+[
+  {
+    "model": "menu.category",
+    "pk": 1,
+    "fields": {
+      "name": "Dum Biryani",
+      "slug": "biryani",
+      "icon": "Flame",
+      "order": 1
+    }
+  },
+  {
+    "model": "menu.category",
+    "pk": 2,
+    "fields": {
+      "name": "Starters & Tandoor",
+      "slug": "starters",
+      "icon": "Sparkles",
+      "order": 2
+    }
+  },
+  {
+    "model": "menu.category",
+    "pk": 3,
+    "fields": {
+      "name": "Indian Meals & Curries",
+      "slug": "curries",
+      "icon": "Soup",
+      "order": 3
+    }
+  },
+  {
+    "model": "menu.category",
+    "pk": 4,
+    "fields": {
+      "name": "Breads & Rice",
+      "slug": "breads",
+      "icon": "Wheat",
+      "order": 4
+    }
+  },
+  {
+    "model": "menu.category",
+    "pk": 5,
+    "fields": {
+      "name": "Royal Desserts",
+      "slug": "desserts",
+      "icon": "Cookie",
+      "order": 5
+    }
+  },
+  {
+    "model": "menu.category",
+    "pk": 6,
+    "fields": {
+      "name": "Beverages & Lassi",
+      "slug": "beverages",
+      "icon": "Coffee",
+      "order": 6
+    }
+  },
+  {
+    "model": "tables.restauranttable",
+    "pk": 1,
+    "fields": {
+      "table_number": "T-01",
+      "display_name": "Table 1 (Window Side)",
+      "capacity": 4,
+      "section": "Ground Floor",
+      "is_active": true,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "tables.restauranttable",
+    "pk": 2,
+    "fields": {
+      "table_number": "T-02",
+      "display_name": "Table 2 (Central Hall)",
+      "capacity": 2,
+      "section": "Ground Floor",
+      "is_active": true,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "tables.restauranttable",
+    "pk": 3,
+    "fields": {
+      "table_number": "T-03",
+      "display_name": "Table 3 (Family Booth)",
+      "capacity": 6,
+      "section": "Ground Floor",
+      "is_active": true,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "tables.restauranttable",
+    "pk": 4,
+    "fields": {
+      "table_number": "T-04",
+      "display_name": "Table 4 (Garden Terrace)",
+      "capacity": 4,
+      "section": "Outdoor Terrace",
+      "is_active": true,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 1,
+    "fields": {
+      "category": 1,
+      "name": "Nizami Chicken Dum Biryani",
+      "slug": "nizami-chicken-dum-biryani",
+      "description": "Slow-cooked fragrant basmati rice layered with succulent marinated chicken, saffron, fried onions, and whole spices in a sealed handi. Served with Mirchi ka Salan and Burani Raita.",
+      "price": "360.00",
+      "image_url": "/src/assets/images/bhojan_dum_biryani_1792839056384.jpg",
+      "food_type": "non-veg",
+      "is_available": true,
+      "is_special": true,
+      "is_popular": true,
+      "spiciness": "medium",
+      "preparation_time_mins": 20,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 6,
+    "fields": {
+      "category": 1,
+      "name": "Hyderabadi Mutton Dum Biryani",
+      "slug": "hyderabadi-mutton-dum-biryani",
+      "description": "Tender baby goat pieces marinated in stone-ground spices and yogurt, slow dum-cooked with aged long-grain basmati, brown onions, and fresh mint.",
+      "price": "460.00",
+      "image_url": "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=800&q=80",
+      "food_type": "non-veg",
+      "is_available": true,
+      "is_special": true,
+      "is_popular": true,
+      "spiciness": "spicy",
+      "preparation_time_mins": 25,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 7,
+    "fields": {
+      "category": 1,
+      "name": "Dum Egg Biryani",
+      "slug": "dum-egg-biryani",
+      "description": "Crisp golden shallow-fried spiced eggs nestled in aromatic saffron and cardamom-infused dum basmati rice. Served with spicy salan.",
+      "price": "270.00",
+      "image_url": "/src/assets/images/bhojan_commons_dum_egg_biryani.jpg",
+      "food_type": "non-veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": false,
+      "spiciness": "medium",
+      "preparation_time_mins": 15,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 8,
+    "fields": {
+      "category": 1,
+      "name": "Shahi Paneer Dum Biryani",
+      "slug": "shahi-paneer-dum-biryani",
+      "description": "Marinated malai paneer cubes, tossed with caramelized onions, royal spices, and slow-steamed fragrant basmati rice.",
+      "price": "310.00",
+      "image_url": "https://images.unsplash.com/photo-1642821373181-696a54913e93?auto=format&fit=crop&w=800&q=80",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": true,
+      "spiciness": "medium",
+      "preparation_time_mins": 18,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 9,
+    "fields": {
+      "category": 1,
+      "name": "Tarkari Vegetable Dum Biryani",
+      "slug": "tarkari-veg-dum-biryani",
+      "description": "Garden fresh beans, florets, carrots, and sweet peas layered with aged basmati rice, scented with rosewater and kewra water in traditional clay handi.",
+      "price": "290.00",
+      "image_url": "/src/assets/images/bhojan_veg_biryani.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": false,
+      "spiciness": "medium",
+      "preparation_time_mins": 18,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 10,
+    "fields": {
+      "category": 1,
+      "name": "Murgh Chicken Tikka Biryani",
+      "slug": "murgh-chicken-tikka-biryani",
+      "description": "Boneless tandoori chicken tikka pieces tossed in fiery tawa masala, layered with spiced saffron biryani rice.",
+      "price": "380.00",
+      "image_url": "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80",
+      "food_type": "non-veg",
+      "is_available": true,
+      "is_special": true,
+      "is_popular": true,
+      "spiciness": "spicy",
+      "preparation_time_mins": 20,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 11,
+    "fields": {
+      "category": 1,
+      "name": "Coastal Malabar Prawn Biryani",
+      "slug": "coastal-malabar-prawn-biryani",
+      "description": "Juicy coastal prawns cooked in coconut and black pepper masala, layered with short-grain kaima basmati, crispy cashews, and raisins.",
+      "price": "490.00",
+      "image_url": "/src/assets/images/bhojan_commons_prawn_biryani.jpg",
+      "food_type": "non-veg",
+      "is_available": true,
+      "is_special": true,
+      "is_popular": false,
+      "spiciness": "medium",
+      "preparation_time_mins": 22,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 12,
+    "fields": {
+      "category": 1,
+      "name": "Dhingri Tawa Mushroom Biryani",
+      "slug": "dhingri-mushroom-biryani",
+      "description": "Fresh button mushrooms sautâ”œâŒed in charred shallots, degi mirch, and whole garam masala, steamed on low charcoal embers.",
+      "price": "300.00",
+      "image_url": "/src/assets/images/bhojan_commons_mushroom_biryani.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": false,
+      "spiciness": "medium",
+      "preparation_time_mins": 16,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 13,
+    "fields": {
+      "category": 1,
+      "name": "Awadhi Mutton Keema Biryani",
+      "slug": "awadhi-mutton-keema-biryani",
+      "description": "Minced mutton bhuna cooked in aromatic desi ghee, layered with long basmati grains, golden fried onions, and green chilies.",
+      "price": "440.00",
+      "image_url": "/src/assets/images/bhojan_commons_keema_biryani.jpg",
+      "food_type": "non-veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": true,
+      "spiciness": "spicy",
+      "preparation_time_mins": 20,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 14,
+    "fields": {
+      "category": 1,
+      "name": "Royal Bhojan Feast Family Pack",
+      "slug": "royal-bhojan-family-biryani",
+      "description": "Grand family platter: Generous portions of Chicken Dum Biryani, 4 boiled eggs, 2 portions of chicken 65, large Mirchi Salan, and Raita (serves 3-4).",
+      "price": "999.00",
+      "image_url": "https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?auto=format&fit=crop&w=800&q=80",
+      "food_type": "non-veg",
+      "is_available": true,
+      "is_special": true,
+      "is_popular": true,
+      "spiciness": "medium",
+      "preparation_time_mins": 25,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 2,
+    "fields": {
+      "category": 2,
+      "name": "Angaar Paneer Tikka",
+      "slug": "angaar-paneer-tikka",
+      "description": "Fresh cottage cheese cubes marinated in hung curd, Kashmiri deggi mirch, and hand-ground spices, clay-oven roasted to charred perfection with bell peppers and onions.",
+      "price": "295.00",
+      "image_url": "/src/assets/images/bhojan_paneer_tikka_1792839057209.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": true,
+      "spiciness": "medium",
+      "preparation_time_mins": 15,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 16,
+    "fields": {
+      "category": 2,
+      "name": "Tandoori Murgh (Half Handi)",
+      "slug": "tandoori-murgh",
+      "description": "Spring chicken seasoned with crushed mustard oil, ginger-garlic paste, and crushed spices, roasted crisp in the clay oven.",
+      "price": "340.00",
+      "image_url": "https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?auto=format&fit=crop&w=800&q=80",
+      "food_type": "non-veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": true,
+      "spiciness": "spicy",
+      "preparation_time_mins": 20,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 17,
+    "fields": {
+      "category": 2,
+      "name": "Classic Murgh Chicken Tikka",
+      "slug": "classic-murgh-chicken-tikka",
+      "description": "Boneless tender chicken chunks steeped in yogurt, lemon juice, roasted cumin, and tandoori masala, skewers-grilled over charcoal embers.",
+      "price": "330.00",
+      "image_url": "/src/assets/images/bhojan_commons_chicken_tikka.jpg",
+      "food_type": "non-veg",
+      "is_available": true,
+      "is_special": true,
+      "is_popular": true,
+      "spiciness": "medium",
+      "preparation_time_mins": 16,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 18,
+    "fields": {
+      "category": 2,
+      "name": "Lucknowi Chicken Seekh Kebab",
+      "slug": "lucknowi-chicken-seekh-kebab",
+      "description": "Finely ground spiced minced chicken blended with brown onions, mint, and mace, wrapped on skewers and grilled. Served with mint chutney.",
+      "price": "320.00",
+      "image_url": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80",
+      "food_type": "non-veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": true,
+      "spiciness": "medium",
+      "preparation_time_mins": 15,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 19,
+    "fields": {
+      "category": 2,
+      "name": "Crispy Hara Bhara Kebab",
+      "slug": "crispy-hara-bhara-kebab",
+      "description": "Delicate pan-fried patties made with fresh spinach, mashed green peas, potatoes, roasted gram flour, and a roasted cashew crown.",
+      "price": "240.00",
+      "image_url": "/src/assets/images/bhojan_commons_hara_bhara_kebab.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": false,
+      "spiciness": "mild",
+      "preparation_time_mins": 12,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 20,
+    "fields": {
+      "category": 2,
+      "name": "Afghani Malai Paneer Tikka",
+      "slug": "afghani-malai-paneer-tikka",
+      "description": "Silky paneer slabs marinated in cashew cream, green cardamom, white pepper, and melted cheese, lightly kissed by tandoori flames.",
+      "price": "310.00",
+      "image_url": "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=800&q=80",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": true,
+      "is_popular": true,
+      "spiciness": "mild",
+      "preparation_time_mins": 15,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 21,
+    "fields": {
+      "category": 2,
+      "name": "Amritsari Tawa Fish Tikka",
+      "slug": "amritsari-tawa-fish-tikka",
+      "description": "Fresh river sole fillets steeped in ajwain (carom seed) marinade, dusted with spiced gram flour, crisp-seared in pure mustard oil.",
+      "price": "390.00",
+      "image_url": "/src/assets/images/bhojan_commons_fish_tikka.jpg",
+      "food_type": "non-veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": true,
+      "spiciness": "medium",
+      "preparation_time_mins": 18,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 22,
+    "fields": {
+      "category": 2,
+      "name": "Spicy Andhra Chicken 65",
+      "slug": "spicy-andhra-chicken-65",
+      "description": "Bite-sized chicken chunks tossed with fiery Guntur red chilies, fresh curry leaves, crushed garlic, and a tangy spiced glaze.",
+      "price": "295.00",
+      "image_url": "/src/assets/images/bhojan_commons_chicken_65.jpg",
+      "food_type": "non-veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": true,
+      "spiciness": "spicy",
+      "preparation_time_mins": 14,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 23,
+    "fields": {
+      "category": 2,
+      "name": "Smoky Tandoori Stuffed Mushroom",
+      "slug": "smoky-tandoori-stuffed-mushroom",
+      "description": "Plump button mushrooms filled with spiced cottage cheese and herbs, dipped in red marinade, and charcoal charred.",
+      "price": "280.00",
+      "image_url": "/src/assets/images/bhojan_commons_tandoori_mushroom.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": false,
+      "spiciness": "medium",
+      "preparation_time_mins": 14,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 24,
+    "fields": {
+      "category": 2,
+      "name": "Dawat-e-Khaas Veg Seekh Kebab",
+      "slug": "dawat-veg-seekh-kebab",
+      "description": "Minced seasonal vegetables, mashed sweet corn, cottage cheese, and aromatic spices skewered and charred over embers.",
+      "price": "260.00",
+      "image_url": "/src/assets/images/bhojan_commons_veg_seekh_kebab.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": false,
+      "spiciness": "medium",
+      "preparation_time_mins": 14,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 4,
+    "fields": {
+      "category": 3,
+      "name": "Old Delhi Butter Chicken",
+      "slug": "old-delhi-butter-chicken",
+      "description": "Charcoal-grilled tandoori chicken simmered in an indulgent satin gravy of vine-ripened tomatoes, cashew paste, fresh white butter, and crushed Kasuri methi.",
+      "price": "390.00",
+      "image_url": "/src/assets/images/bhojan_butter_chicken.jpg",
+      "food_type": "non-veg",
+      "is_available": true,
+      "is_special": true,
+      "is_popular": true,
+      "spiciness": "mild",
+      "preparation_time_mins": 18,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 26,
+    "fields": {
+      "category": 3,
+      "name": "Dal Makhani Bukhara Style",
+      "slug": "dal-makhani-bukhara",
+      "description": "Black lentils slow-cooked overnight for 16 hours over charcoal embers, finished with farm butter, dairy cream, and roasted cumin infusion.",
+      "price": "285.00",
+      "image_url": "/src/assets/images/bhojan_dal_makhani.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": true,
+      "spiciness": "mild",
+      "preparation_time_mins": 12,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 27,
+    "fields": {
+      "category": 3,
+      "name": "Royal Paneer Butter Masala",
+      "slug": "royal-paneer-butter-masala",
+      "description": "Soft cottage cheese pillows submerged in a rich, buttery, velvety tomato and cream gravy accented with aromatic dried fenugreek leaves.",
+      "price": "310.00",
+      "image_url": "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=800&q=80",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": true,
+      "spiciness": "mild",
+      "preparation_time_mins": 15,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 28,
+    "fields": {
+      "category": 3,
+      "name": "Kadhai Paneer Peshawari",
+      "slug": "kadhai-paneer-peshawari",
+      "description": "Cottage cheese, crunchy bell peppers, and shallots tossed in a freshly pounded coriander-red chili kadhai spice blend.",
+      "price": "320.00",
+      "image_url": "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=800&q=80",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": true,
+      "spiciness": "spicy",
+      "preparation_time_mins": 16,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 29,
+    "fields": {
+      "category": 3,
+      "name": "Home-Style Desi Chicken Curry",
+      "slug": "home-style-desi-chicken-curry",
+      "description": "Rustic Punjabi chicken gravy cooked with caramelized onions, tomatoes, ginger, and whole crushed spices. Comfort food at its finest.",
+      "price": "350.00",
+      "image_url": "https://images.unsplash.com/photo-1603496987351-f84a3ba5ec85?auto=format&fit=crop&w=800&q=80",
+      "food_type": "non-veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": true,
+      "spiciness": "medium",
+      "preparation_time_mins": 18,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 30,
+    "fields": {
+      "category": 3,
+      "name": "Kashmiri Mutton Rogan Josh",
+      "slug": "kashmiri-mutton-rogan-josh",
+      "description": "Slow-simmered tender lamb shanks cooked with Kashmiri deggi mirch, fennel, and whole spices in a deeply aromatic crimson curry.",
+      "price": "480.00",
+      "image_url": "https://images.unsplash.com/photo-1545247181-516773cae754?auto=format&fit=crop&w=800&q=80",
+      "food_type": "non-veg",
+      "is_available": true,
+      "is_special": true,
+      "is_popular": true,
+      "spiciness": "medium",
+      "preparation_time_mins": 22,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 31,
+    "fields": {
+      "category": 3,
+      "name": "Lehsooni Palak Paneer",
+      "slug": "lehsooni-palak-paneer",
+      "description": "Blanched garden spinach purâ”œâŒe tempered with roasted golden garlic cloves, finished with fresh paneer cubes and light cream.",
+      "price": "295.00",
+      "image_url": "/src/assets/images/bhojan_commons_palak_paneer.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": false,
+      "spiciness": "mild",
+      "preparation_time_mins": 14,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 32,
+    "fields": {
+      "category": 3,
+      "name": "Pindi Chole Masala",
+      "slug": "pindi-chole-masala",
+      "description": "Authentic dark-tea infused chickpeas slow-simmered with dried pomegranate seeds, carom, and roasted cumin powder. Rich and tangy.",
+      "price": "240.00",
+      "image_url": "/src/assets/images/bhojan_commons_pindi_chole.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": false,
+      "spiciness": "medium",
+      "preparation_time_mins": 12,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 33,
+    "fields": {
+      "category": 3,
+      "name": "Goan Coastal Fish Curry",
+      "slug": "goan-coastal-fish-curry",
+      "description": "Fresh fish fillets gently simmered in a spiced coconut milk broth, kokum, curry leaves, and green chilies. Perfectly paired with rice.",
+      "price": "410.00",
+      "image_url": "/src/assets/images/bhojan_commons_goan_fish_curry.jpg",
+      "food_type": "non-veg",
+      "is_available": true,
+      "is_special": true,
+      "is_popular": false,
+      "spiciness": "spicy",
+      "preparation_time_mins": 20,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 34,
+    "fields": {
+      "category": 3,
+      "name": "Subz Diwani Handi (Seasonal Veg)",
+      "slug": "subz-diwani-handi",
+      "description": "Medley of baby corn, beans, carrots, and peas tossed in a creamy spinach and onion-cashew paste gravy with royal whole spices.",
+      "price": "270.00",
+      "image_url": "/src/assets/images/bhojan_commons_mixed_vegetable_curry.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": false,
+      "spiciness": "medium",
+      "preparation_time_mins": 14,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 35,
+    "fields": {
+      "category": 4,
+      "name": "Garlic Butter Naan Basket",
+      "slug": "garlic-butter-naan-basket",
+      "description": "Trio of hand-stretched tandoori naans topped with minced roasted garlic, fresh coriander leaves, and brushed with pure salted cow ghee.",
+      "price": "130.00",
+      "image_url": "/src/assets/images/bhojan_garlic_naan.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": true,
+      "spiciness": "mild",
+      "preparation_time_mins": 8,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 36,
+    "fields": {
+      "category": 4,
+      "name": "Classic Tandoori Butter Naan",
+      "slug": "classic-tandoori-butter-naan",
+      "description": "Soft, pillowy refined flour bread baked inside the clay tandoor and generously brushed with melted golden butter.",
+      "price": "65.00",
+      "image_url": "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": true,
+      "spiciness": "mild",
+      "preparation_time_mins": 6,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 37,
+    "fields": {
+      "category": 4,
+      "name": "Charred Tandoori Roti",
+      "slug": "charred-tandoori-roti",
+      "description": "Whole wheat flour flatbread slapped on the inner clay oven wall, cooked till crisp on the outside and soft within.",
+      "price": "35.00",
+      "image_url": "/src/assets/images/bhojan_commons_tandoori_roti.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": false,
+      "spiciness": "mild",
+      "preparation_time_mins": 5,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 38,
+    "fields": {
+      "category": 4,
+      "name": "Butter Laccha Paratha",
+      "slug": "butter-laccha-paratha",
+      "description": "Multi-layered flaky whole wheat bread folded with pure ghee and roasted to a golden crispy finish in the tandoor.",
+      "price": "75.00",
+      "image_url": "/src/assets/images/bhojan_commons_lachha_paratha.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": true,
+      "spiciness": "mild",
+      "preparation_time_mins": 8,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 39,
+    "fields": {
+      "category": 4,
+      "name": "Fragrant Jeera Rice",
+      "slug": "fragrant-jeera-rice",
+      "description": "Steamed premium basmati rice tempered with golden roasted cumin seeds, bay leaf, and fresh ghee.",
+      "price": "180.00",
+      "image_url": "https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&w=800&q=80",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": false,
+      "spiciness": "mild",
+      "preparation_time_mins": 8,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 40,
+    "fields": {
+      "category": 4,
+      "name": "Aged Steamed Basmati Rice",
+      "slug": "aged-steamed-basmati-rice",
+      "description": "Fluffy long grain extra-aged Royal Basmati rice, gently steamed to perfection.",
+      "price": "140.00",
+      "image_url": "https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?auto=format&fit=crop&w=800&q=80",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": false,
+      "spiciness": "mild",
+      "preparation_time_mins": 6,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 41,
+    "fields": {
+      "category": 4,
+      "name": "Amritsari Butter Onion Kulcha",
+      "slug": "amritsari-butter-onion-kulcha",
+      "description": "Flaky leavened bread stuffed with chopped spiced onions, green chilies, and crushed pomegranate seeds, topped with butter.",
+      "price": "90.00",
+      "image_url": "/src/assets/images/bhojan_commons_amritsari_kulcha.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": true,
+      "spiciness": "mild",
+      "preparation_time_mins": 10,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 42,
+    "fields": {
+      "category": 4,
+      "name": "Shahi Assorted Roti & Naan Basket",
+      "slug": "shahi-assorted-roti-naan-basket",
+      "description": "Grand assortment of 1 Butter Naan, 1 Garlic Naan, 1 Laccha Paratha, and 2 Tandoori Rotis. Perfect for sharing.",
+      "price": "210.00",
+      "image_url": "/src/assets/images/bhojan_commons_assorted_breads.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": true,
+      "is_popular": true,
+      "spiciness": "mild",
+      "preparation_time_mins": 12,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 3,
+    "fields": {
+      "category": 5,
+      "name": "Shahi Gulab Jamun with Saffron Rabdi",
+      "slug": "shahi-gulab-jamun",
+      "description": "Melt-in-mouth golden khoya dumplings soaked in warm rose and cardamom syrup, crowned with slivered pistachios and slow-simmered rich rabdi.",
+      "price": "180.00",
+      "image_url": "/src/assets/images/bhojan_gulab_jamun_1792839057318.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": true,
+      "is_popular": true,
+      "spiciness": "mild",
+      "preparation_time_mins": 8,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 44,
+    "fields": {
+      "category": 5,
+      "name": "Halwai Style Soft Rasmalai",
+      "slug": "halwai-soft-rasmalai",
+      "description": "Porous chenna discs soaked in thickened saffron and pistachio infused cardamom milk, served chilled with rose petals.",
+      "price": "190.00",
+      "image_url": "/src/assets/images/bhojan_commons_rasmalai.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": true,
+      "is_popular": true,
+      "spiciness": "mild",
+      "preparation_time_mins": 6,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 45,
+    "fields": {
+      "category": 5,
+      "name": "Slow-Simmered Gajar Ka Halwa",
+      "slug": "slow-simmered-gajar-ka-halwa",
+      "description": "Grated seasonal red winter carrots cooked in full-cream milk, reduced khoya, pure cow ghee, and toasted cashews.",
+      "price": "175.00",
+      "image_url": "/src/assets/images/bhojan_commons_gajar_halwa.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": true,
+      "spiciness": "mild",
+      "preparation_time_mins": 8,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 46,
+    "fields": {
+      "category": 5,
+      "name": "Kesar Pista Matka Kulfi",
+      "slug": "kesar-pista-matka-kulfi",
+      "description": "Traditional dense Indian ice cream prepared from slow-reduced milk, flavored with Kashmiri saffron, crushed pistachios, and almond shavings.",
+      "price": "150.00",
+      "image_url": "/src/assets/images/bhojan_commons_matka_kulfi.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": true,
+      "spiciness": "mild",
+      "preparation_time_mins": 5,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 47,
+    "fields": {
+      "category": 5,
+      "name": "Banarasi Malai Rabdi",
+      "slug": "banarasi-malai-rabdi",
+      "description": "Pot of thickened cream layers infused with cardamom, saffron, and crushed nuts. Served chilled.",
+      "price": "160.00",
+      "image_url": "/src/assets/images/bhojan_commons_homemade_rabri.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": false,
+      "spiciness": "mild",
+      "preparation_time_mins": 5,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 48,
+    "fields": {
+      "category": 5,
+      "name": "Kesar Pista Royal Ice Cream",
+      "slug": "kesar-pista-royal-ice-cream",
+      "description": "Double scoops of gourmet saffron cream ice cream embedded with crunchy pistachio praline.",
+      "price": "130.00",
+      "image_url": "/src/assets/images/bhojan_commons_dry_fruit_kulfi.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": false,
+      "spiciness": "mild",
+      "preparation_time_mins": 4,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 49,
+    "fields": {
+      "category": 5,
+      "name": "Crispy Saffron Jalebi with Rabdi",
+      "slug": "crispy-saffron-jalebi-rabdi",
+      "description": "Spiral crispy golden jalebis fresh from the kadhai, soaked in saffron syrup, served alongside thick rabdi.",
+      "price": "180.00",
+      "image_url": "/src/assets/images/bhojan_commons_jalebi.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": true,
+      "is_popular": true,
+      "spiciness": "mild",
+      "preparation_time_mins": 8,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 50,
+    "fields": {
+      "category": 5,
+      "name": "Royal Awadhi Shahi Tukda",
+      "slug": "royal-awadhi-shahi-tukda",
+      "description": "Crispy ghee-fried bread triangles soaked in fragrant sugar syrup, coated with thick rabdi, silver vark, and roasted dry fruits.",
+      "price": "190.00",
+      "image_url": "/src/assets/images/bhojan_commons_shahi_tukda.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": true,
+      "is_popular": false,
+      "spiciness": "mild",
+      "preparation_time_mins": 10,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 51,
+    "fields": {
+      "category": 6,
+      "name": "Kesariya Mango Lassi",
+      "slug": "kesariya-mango-lassi",
+      "description": "Traditional Punjabi thick churned yogurt drink blended with Alphonso mango pulp, Kashmiri saffron strands, and roasted cardamom powder.",
+      "price": "150.00",
+      "image_url": "/src/assets/images/bhojan_commons_mango_lassi.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": true,
+      "is_popular": true,
+      "spiciness": "mild",
+      "preparation_time_mins": 5,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 52,
+    "fields": {
+      "category": 6,
+      "name": "Amritsari Sweet Malai Lassi",
+      "slug": "amritsari-sweet-malai-lassi",
+      "description": "Thick, creamy hand-churned curd lassi topped with a generous dollop of fresh clotted cream (malai) and kewra drops.",
+      "price": "130.00",
+      "image_url": "/src/assets/images/bhojan_commons_sweet_lassi.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": true,
+      "spiciness": "mild",
+      "preparation_time_mins": 5,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 53,
+    "fields": {
+      "category": 6,
+      "name": "Spiced Masala Chaas (Buttermilk)",
+      "slug": "spiced-masala-chaas",
+      "description": "Cooling churned yogurt tempered with roasted cumin, fresh ginger, green chilies, cilantro, and rock salt. Perfect digestif.",
+      "price": "80.00",
+      "image_url": "/src/assets/images/bhojan_commons_masala_buttermilk.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": false,
+      "spiciness": "mild",
+      "preparation_time_mins": 4,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 54,
+    "fields": {
+      "category": 6,
+      "name": "Royal Saffron Badam Milk",
+      "slug": "royal-saffron-badam-milk",
+      "description": "Warm slow-simmered almond milk flavored with genuine saffron, cardamom, and roasted crushed slivered nuts.",
+      "price": "160.00",
+      "image_url": "/src/assets/images/bhojan_commons_badam_milk.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": true,
+      "is_popular": false,
+      "spiciness": "mild",
+      "preparation_time_mins": 6,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 55,
+    "fields": {
+      "category": 6,
+      "name": "Spiced Cutting Masala Chai",
+      "slug": "spiced-cutting-masala-chai",
+      "description": "Strong Assam tea brewed with freshly crushed ginger, green cardamom, cloves, and whole cinnamon in hot creamy milk.",
+      "price": "60.00",
+      "image_url": "/src/assets/images/bhojan_commons_masala_chai.jpg",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": true,
+      "spiciness": "mild",
+      "preparation_time_mins": 5,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 56,
+    "fields": {
+      "category": 6,
+      "name": "Fresh Mint Lime Soda",
+      "slug": "fresh-mint-lime-soda",
+      "description": "Freshly squeezed key lime, crushed garden mint, and chilled sparkling soda with your choice of sweet or salt rock seasoning.",
+      "price": "90.00",
+      "image_url": "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=800&q=80",
+      "food_type": "veg",
+      "is_available": true,
+      "is_special": false,
+      "is_popular": false,
+      "spiciness": "mild",
+      "preparation_time_mins": 4,
+      "created_at": "2026-10-25T12:00:00Z",
+      "updated_at": "2026-10-25T12:00:00Z"
+    }
+  }
+]

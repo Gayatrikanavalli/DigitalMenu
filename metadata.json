@@ -1,0 +1,6 @@
+{
+  "name": "BhojanQR – Restaurant Digital Menu & QR Order System",
+  "description": "Premium restaurant digital menu and QR-based ordering web application with customer ordering, kitchen display, and table QR management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

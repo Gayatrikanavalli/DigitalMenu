@@ -1,0 +1,3 @@
+"""
+BhojanQR Django Configuration Package
+"""

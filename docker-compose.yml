@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: bhojanqr_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: bhojan_db
+      POSTGRES_USER: bhojan_user
+      POSTGRES_PASSWORD: bhojan_secure_password_2026
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bhojan_user -d bhojan_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: bhojanqr_django
+    restart: always
+    volumes:
+      - ./backend:/app
+      - ./backend/media:/app/media
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SECRET_KEY=bhojan_secret_key_production_2026
+      - DEBUG=True
+      - DB_NAME=bhojan_db
+      - DB_USER=bhojan_user
+      - DB_PASSWORD=bhojan_secure_password_2026
+      - DB_HOST=db
+      - DB_PORT=5432
+      # Public URL embedded in table QR codes. Must be the laptop's LAN IP
+      # (e.g. http://10.218.105.8:3000) so phones on the same Wi-Fi can open it.
+      - FRONTEND_PUBLIC_URL=http://10.218.105.8:3000
+      - ALLOWED_HOSTS=192.168.1.5,localhost,127.0.0.1,10.218.105.8,backend
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000,http://192.168.1.5:3000
+      - STAFF_MANAGER_PASSWORD=manager123
+      - STAFF_KITCHEN_PASSWORD=kitchen123
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000/api}
+        - FRONTEND_PUBLIC_URL=${FRONTEND_PUBLIC_URL:-http://10.218.105.8:3000}
+    container_name: bhojanqr_frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      # BACKEND_INTERNAL_URL is used server-side by the Next.js rewrite proxy
+      # to forward /api/* -> http://backend:8000/api/* inside the Docker network.
+      - BACKEND_INTERNAL_URL=http://backend:8000
+      # Browser-side API base URL. Must be the laptop's LAN IP
+      # (e.g. http://192.168.1.5:8000/api) so phones on the same Wi-Fi can
+      # call the API directly (CORS_ALLOWED_ORIGINS covers this origin).
+      - NEXT_PUBLIC_API_URL=http://192.168.1.5:8000/api
+      - FRONTEND_PUBLIC_URL=http://10.218.105.8:3000
+      - NEXT_PUBLIC_DEMO_MODE=false
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
