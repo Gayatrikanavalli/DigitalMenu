@@ -1,13 +1,26 @@
 /** @type {import('next').NextConfig} */
+
+const path = require('path');
+
 const nextConfig = {
   reactStrictMode: true,
+
+  // Allow Next.js to access shared source files outside frontend/
+  outputFileTracingRoot: path.join(__dirname, '../'),
+
   images: {
     unoptimized: true,
   },
+
   env: {
-    FRONTEND_PUBLIC_URL: process.env.FRONTEND_PUBLIC_URL || 'http://10.218.105.8:3000',
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api',
+    FRONTEND_PUBLIC_URL:
+      process.env.FRONTEND_PUBLIC_URL || 'http://localhost:3000',
+
+    NEXT_PUBLIC_API_URL:
+      process.env.NEXT_PUBLIC_API_URL ||
+      'https://digital-menu-la22.onrender.com/api',
   },
+
   async rewrites() {
     return [
       {
@@ -16,7 +29,10 @@ const nextConfig = {
       },
       {
         source: '/api/:path*',
-        destination: `${process.env.BACKEND_INTERNAL_URL || 'http://backend:8000'}/api/:path*`,
+        destination: `${
+          process.env.BACKEND_INTERNAL_URL ||
+          'https://digital-menu-la22.onrender.com'
+        }/api/:path*`,
       },
     ];
   },
