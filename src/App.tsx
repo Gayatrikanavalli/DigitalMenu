@@ -232,6 +232,7 @@ export default function App() {
         const cats = await api.categories.list();
         if (cats.length && mounted) {
           setCategories(cats);
+          saveCategories(cats);
         }
       } catch { /* fallback already loaded */ }
       try {

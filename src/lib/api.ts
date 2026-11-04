@@ -113,57 +113,55 @@ export const api = {
     },
 
     create: async (data: Omit<MenuItem, 'id' | 'slug'>): Promise<MenuItem> => {
-      try {
-        const payload = {
-          name: data.name,
-          slug: data.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-          description: data.description,
-          price: data.price,
-          food_type: data.foodType,
-          is_available: data.isAvailable,
-          is_active: data.isActive !== false,
-          is_special: data.isSpecial || false,
-          tags: data.tags || [],
-          image_url: data.image,
-          preparation_time_mins: data.preparationTimeMins || 15,
-          category: 1, // default foreign key ID
+      const categories = await api.categories.list();
+      const category = categories.find((c) => c.slug === data.category || c.id === data.category);
+      const categoryId = category ? Number(category.id) : 1;
+
+      const payload = {
+        name: data.name,
+        slug: data.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        description: data.description,
+        price: data.price,
+        food_type: data.foodType,
+        is_available: data.isAvailable,
+        is_active: data.isActive !== false,
+        is_special: data.isSpecial || false,
+        tags: data.tags || [],
+        image_url: data.image,
+        preparation_time_mins: data.preparationTimeMins || 15,
+        category: categoryId,
+      };
+
+      const response = await apiClient.post<any>('/menu/items', payload);
+      if (response.data?.id) {
+        return {
+          ...data,
+          id: String(response.data.id),
+          slug: response.data.slug,
         };
-        const response = await apiClient.post<any>('/menu/items', payload);
-        if (response.data?.id) {
-          return {
-            ...data,
-            id: String(response.data.id),
-            slug: response.data.slug,
-          };
-        }
-      } catch (err) {
-        // Fallback to local store
       }
-      return addLocalMenuItem(data);
+      throw new Error('Failed to create menu item');
     },
 
     update: async (id: string, updates: Partial<MenuItem>): Promise<MenuItem | null> => {
-      try {
-        const payload: any = {};
-        if (updates.name !== undefined) payload.name = updates.name;
-        if (updates.price !== undefined) payload.price = updates.price;
-        if (updates.isAvailable !== undefined) payload.is_available = updates.isAvailable;
-        if (updates.isActive !== undefined) payload.is_active = updates.isActive;
-        if (updates.tags !== undefined) payload.tags = updates.tags;
-        if (updates.description !== undefined) payload.description = updates.description;
-        await apiClient.patch(`/menu/items/${id}`, payload);
-      } catch (err) {
-        // Fallback
+      const payload: any = {};
+      if (updates.name !== undefined) payload.name = updates.name;
+      if (updates.price !== undefined) payload.price = updates.price;
+      if (updates.isAvailable !== undefined) payload.is_available = updates.isAvailable;
+      if (updates.isActive !== undefined) payload.is_active = updates.isActive;
+      if (updates.tags !== undefined) payload.tags = updates.tags;
+      if (updates.description !== undefined) payload.description = updates.description;
+      if (updates.category !== undefined) {
+        const categories = await api.categories.list();
+        const category = categories.find((c) => c.slug === updates.category || c.id === updates.category);
+        if (category) payload.category = Number(category.id);
       }
+      await apiClient.patch(`/menu/items/${id}`, payload);
       return updateLocalMenuItem(id, updates);
     },
 
     delete: async (id: string): Promise<boolean> => {
-      try {
-        await apiClient.delete(`/menu/items/${id}`);
-      } catch (err) {
-        // Fallback
-      }
+      await apiClient.delete(`/menu/items/${id}`);
       return deleteLocalMenuItem(id);
     },
   },
