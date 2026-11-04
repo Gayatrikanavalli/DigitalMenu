@@ -1,11 +1,4 @@
-# BhojanQR – Restaurant Digital Menu & QR Order System
 
-> **Internship Assignment Submission**  
-> **Company:** Atronz Innovations  
-> **Role:** Full-Stack Web Development Intern  
-> **Project:** Production-Ready Restaurant Digital Menu, QR Ordering, Kitchen Display (KDS), and Table Management System
-
----
 
 ## 1. Technology Stack Specification
 
