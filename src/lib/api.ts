@@ -35,7 +35,7 @@ export const api = {
     list: async (): Promise<Category[]> => {
       try {
         const response = await apiClient.get<any[]>('/menu/categories');
-        if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+        if (response.data && Array.isArray(response.data)) {
           return response.data.map((c) => ({
             id: String(c.id),
             name: c.name,
@@ -82,7 +82,7 @@ export const api = {
     list: async (params?: { category?: string; food_type?: string; search?: string; include_inactive?: boolean }): Promise<MenuItem[]> => {
       try {
         const response = await apiClient.get<any[]>('/menu/items', { params });
-        if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+        if (response.data && Array.isArray(response.data)) {
           return response.data.map((item) => ({
             id: String(item.id),
             name: item.name,
@@ -116,18 +116,34 @@ export const api = {
       const categories = await api.categories.list();
       const category = categories.find((c) => c.slug === data.category || c.id === data.category);
       const categoryId = category ? Number(category.id) : 1;
+      const categorySlug = category?.slug || data.category || 'menu';
 
+      const existingItems = await api.menu.list({ include_inactive: true });
+      const duplicate = existingItems.find(
+        (item) =>
+          item.name.trim().toLowerCase() === data.name.trim().toLowerCase() &&
+          (item.category === data.category || item.category === categorySlug)
+      );
+      if (duplicate) {
+        throw new Error('A menu item with this name already exists in the selected category.');
+      }
+
+      const baseSlug = `${categorySlug}-${data.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
       const payload = {
         name: data.name,
-        slug: data.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        slug: baseSlug,
         description: data.description,
         price: data.price,
         food_type: data.foodType,
         is_available: data.isAvailable,
         is_active: data.isActive !== false,
         is_special: data.isSpecial || false,
+        is_popular: data.isPopular || false,
         tags: data.tags || [],
         image_url: data.image,
+        spiciness: data.spiciness || 'medium',
         preparation_time_mins: data.preparationTimeMins || 15,
         category: categoryId,
       };
@@ -151,6 +167,12 @@ export const api = {
       if (updates.isActive !== undefined) payload.is_active = updates.isActive;
       if (updates.tags !== undefined) payload.tags = updates.tags;
       if (updates.description !== undefined) payload.description = updates.description;
+      if (updates.image !== undefined) payload.image_url = updates.image;
+      if (updates.foodType !== undefined) payload.food_type = updates.foodType;
+      if (updates.spiciness !== undefined) payload.spiciness = updates.spiciness;
+      if (updates.preparationTimeMins !== undefined) payload.preparation_time_mins = updates.preparationTimeMins;
+      if (updates.isSpecial !== undefined) payload.is_special = updates.isSpecial;
+      if (updates.isPopular !== undefined) payload.is_popular = updates.isPopular;
       if (updates.category !== undefined) {
         const categories = await api.categories.list();
         const category = categories.find((c) => c.slug === updates.category || c.id === updates.category);

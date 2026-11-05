@@ -21,3 +21,18 @@ class MenuItemSerializer(serializers.ModelSerializer):
             'is_active', 'is_deleted', 'is_available', 'is_special', 'is_popular', 'tags', 'spiciness',
             'preparation_time_mins', 'created_at', 'updated_at', 'order_count'
         ]
+
+    def validate(self, attrs):
+        name = attrs.get('name', getattr(self.instance, 'name', None))
+        category = attrs.get('category', getattr(self.instance, 'category', None))
+
+        if name and category is not None:
+            queryset = MenuItem.objects.filter(name__iexact=name, category=category)
+            if self.instance is not None:
+                queryset = queryset.exclude(pk=self.instance.pk)
+            if queryset.exists():
+                raise serializers.ValidationError(
+                    {'name': 'A menu item with this name already exists in the selected category.'}
+                )
+
+        return attrs

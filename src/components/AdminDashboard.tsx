@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ShieldCheck, 
   Utensils, 
@@ -83,7 +83,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [isDishModalOpen, setIsDishModalOpen] = useState(false);
   const [editingDishId, setEditingDishId] = useState<string | null>(null);
   const [dishName, setDishName] = useState('');
-  const [dishCategory, setDishCategory] = useState('biryani');
+  const [dishCategory, setDishCategory] = useState<string>('');
+  const [dishError, setDishError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!dishCategory && categories.length > 0) {
+      setDishCategory(categories[0].slug);
+    }
+  }, [categories, dishCategory]);
   const [dishDescription, setDishDescription] = useState('');
   const [dishPrice, setDishPrice] = useState<number>(299);
   const [dishFoodType, setDishFoodType] = useState<FoodType>('veg');
@@ -103,7 +110,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const handleOpenAddDish = () => {
     setEditingDishId(null);
     setDishName('');
-    setDishCategory('biryani');
+    setDishCategory(categories[0]?.slug || 'biryani');
     setDishDescription('');
     setDishPrice(299);
     setDishFoodType('veg');
@@ -130,40 +137,59 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setIsDishModalOpen(true);
   };
 
-  const handleSaveDish = (e: React.FormEvent) => {
+  const handleSaveDish = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!dishName.trim() || dishPrice <= 0) return;
+    setDishError(null);
 
     if (editingDishId) {
-      onUpdateMenuItem(editingDishId, {
-        name: dishName.trim(),
-        category: dishCategory,
-        description: dishDescription.trim(),
-        price: Number(dishPrice),
-        foodType: dishFoodType,
-        image: dishImage,
-        isAvailable: true,
-        isActive: dishIsActive,
-        tags: dishTags,
-        preparationTimeMins: Number(dishPrepTime),
-        spiciness: dishSpiciness,
-      });
+      try {
+        await onUpdateMenuItem(editingDishId, {
+          name: dishName.trim(),
+          category: dishCategory,
+          description: dishDescription.trim(),
+          price: Number(dishPrice),
+          foodType: dishFoodType,
+          image: dishImage,
+          isAvailable: true,
+          isActive: dishIsActive,
+          tags: dishTags,
+          preparationTimeMins: Number(dishPrepTime),
+          spiciness: dishSpiciness,
+        });
+        setIsDishModalOpen(false);
+      } catch (err: any) {
+        setDishError(err?.message || 'Failed to update dish.');
+      }
     } else {
-      onAddMenuItem({
-        name: dishName.trim(),
-        category: dishCategory,
-        description: dishDescription.trim(),
-        price: Number(dishPrice),
-        foodType: dishFoodType,
-        image: dishImage,
-        isAvailable: true,
-        isActive: dishIsActive,
-        tags: dishTags,
-        preparationTimeMins: Number(dishPrepTime),
-        spiciness: dishSpiciness,
-      });
+      const duplicate = menuItems.some(
+        (item) =>
+          item.name.trim().toLowerCase() === dishName.trim().toLowerCase() &&
+          item.category === dishCategory
+      );
+      if (duplicate) {
+        setDishError('A dish with this name already exists in the selected category.');
+        return;
+      }
+      try {
+        await onAddMenuItem({
+          name: dishName.trim(),
+          category: dishCategory,
+          description: dishDescription.trim(),
+          price: Number(dishPrice),
+          foodType: dishFoodType,
+          image: dishImage,
+          isAvailable: true,
+          isActive: dishIsActive,
+          tags: dishTags,
+          preparationTimeMins: Number(dishPrepTime),
+          spiciness: dishSpiciness,
+        });
+        setIsDishModalOpen(false);
+      } catch (err: any) {
+        setDishError(err?.message || 'Failed to add dish.');
+      }
     }
-    setIsDishModalOpen(false);
   };
 
   const handleSaveTable = (e: React.FormEvent) => {
@@ -657,6 +683,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               {editingDishId ? 'Edit Dish Details' : 'Add New Dish to BhojanQR'}
             </h3>
 
+            {dishError && (
+              <div className="mb-3 rounded-lg bg-red-50 text-red-700 text-xs border border-red-200 px-3 py-2">
+                {dishError}
+              </div>
+            )}
+
             <form onSubmit={handleSaveDish} className="space-y-3.5">
               <div>
                 <label className="block text-xs font-semibold text-stone-700 mb-1">Dish Name</label>
@@ -678,12 +710,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     onChange={(e) => setDishCategory(e.target.value)}
                     className="w-full text-xs px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-600 bg-white"
                   >
-                    <option value="biryani">Dum Biryani</option>
-                    <option value="starters">Starters & Tandoor</option>
-                    <option value="curries">Indian Meals & Curries</option>
-                    <option value="breads">Breads & Rice</option>
-                    <option value="desserts">Royal Desserts</option>
-                    <option value="beverages">Beverages & Lassi</option>
+                    {categories.map((cat) => (
+                      <option key={cat.id} value={cat.slug}>
+                        {cat.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -860,7 +891,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       Edit
                     </button>
                     <button
-                      onClick={() => onDeleteCategory(cat.id)}
+                      onClick={async () => {
+                        if ((cat.itemCount || 0) > 0) {
+                          setDeleteMessage('Cannot delete a category that still has dishes assigned.');
+                          return;
+                        }
+                        try {
+                          await onDeleteCategory(cat.id);
+                          setDeleteMessage('Category deleted successfully.');
+                        } catch (err: any) {
+                          setDeleteMessage(err?.message || 'Failed to delete category.');
+                        }
+                      }}
                       className="text-xs text-red-600 font-semibold"
                     >
                       Delete

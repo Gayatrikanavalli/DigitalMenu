@@ -230,14 +230,14 @@ export default function App() {
     const loadShared = async () => {
       try {
         const cats = await api.categories.list();
-        if (cats.length && mounted) {
+        if (mounted) {
           setCategories(cats);
           saveCategories(cats);
         }
       } catch { /* fallback already loaded */ }
       try {
         const items = await api.menu.list({ include_inactive: true });
-        if (items.length && mounted) {
+        if (mounted) {
           setMenuItems(items);
           saveMenuItems(items);
         }

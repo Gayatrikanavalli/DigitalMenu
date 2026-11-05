@@ -18,6 +18,15 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
     permission_classes = [IsManagerOrReadOnly]
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.items.exists():
+            return Response(
+                {'detail': 'Cannot delete a category that still has menu items. Reassign or remove its dishes first.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        return super().destroy(request, *args, **kwargs)
+
 class MenuItemViewSet(viewsets.ModelViewSet):
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
