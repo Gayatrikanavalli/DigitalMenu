@@ -8,6 +8,10 @@ from .serializers import OrderSerializer
 from accounts.permissions import IsStaff, IsManager, IsKitchenStaff
 
 
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
+@method_decorator(csrf_exempt, name='create')
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all().prefetch_related('items').order_by('-created_at')
     serializer_class = OrderSerializer

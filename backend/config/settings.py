@@ -147,3 +147,11 @@ CORS_ALLOWED_ORIGINS = [origin.strip() for origin in os.getenv('CORS_ALLOWED_ORI
 # on the same Wi-Fi can open the link scanned from a table QR code.
 FRONTEND_PUBLIC_URL = os.getenv('FRONTEND_PUBLIC_URL', 'http://10.218.105.8:3000')
 NEXT_PUBLIC_BASE_URL = os.getenv('NEXT_PUBLIC_BASE_URL', '')
+
+# Ensure the configured frontend origin is always allowed for CORS and CSRF,
+# even if the explicit environment variables are not set on the host.
+_frontend_origin = FRONTEND_PUBLIC_URL.rstrip('/')
+if _frontend_origin and _frontend_origin not in CORS_ALLOWED_ORIGINS:
+    CORS_ALLOWED_ORIGINS = CORS_ALLOWED_ORIGINS + [_frontend_origin]
+if _frontend_origin and _frontend_origin not in CSRF_TRUSTED_ORIGINS:
+    CSRF_TRUSTED_ORIGINS = CSRF_TRUSTED_ORIGINS + [_frontend_origin]
