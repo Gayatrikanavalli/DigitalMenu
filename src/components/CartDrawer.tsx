@@ -65,8 +65,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       setCustomerPhone('');
       setSpecialInstructions('');
       onClose();
-    } catch (err) {
-      setErrorMsg('Unable to place order. Please try again.');
+    } catch (err: any) {
+      setErrorMsg(err?.message || 'Unable to place order. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -211,8 +211,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       required
                       value={customerName}
                       onChange={(e) => setCustomerName(e.target.value)}
-                      placeholder="e.g. Rahul Verma"
-                      className="w-full text-xs px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-600 bg-white"
+                       placeholder="e.g. Rahul Verma"
+                       className="w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-500/30 bg-white text-stone-900 placeholder:text-stone-400"
                     />
                   </div>
 
@@ -224,8 +224,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       type="tel"
                       value={customerPhone}
                       onChange={(e) => setCustomerPhone(e.target.value)}
-                      placeholder="+91 98765 43210"
-                      className="w-full text-xs px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-600 bg-white"
+                       placeholder="+91 98765 43210"
+                       className="w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-500/30 bg-white text-stone-900 placeholder:text-stone-400"
                     />
                   </div>
 
@@ -238,7 +238,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       value={specialInstructions}
                       onChange={(e) => setSpecialInstructions(e.target.value)}
                       placeholder="e.g. Less spicy, send extra mint chutney, no dairy..."
-                      className="w-full text-xs px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-600 bg-white resize-none"
+                       className="w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-500/30 bg-white text-stone-900 placeholder:text-stone-400 resize-none"
                     />
                   </div>
 

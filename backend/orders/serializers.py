@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db import transaction
 from decimal import Decimal
 import uuid
 from .models import Order, OrderItem
@@ -53,6 +54,9 @@ class OrderSerializer(serializers.ModelSerializer):
         table_identifier = validated_data.pop('table_identifier', None)
         items_input = validated_data.pop('order_items_input', [])
 
+        if not items_input:
+            raise serializers.ValidationError({'order_items_input': 'At least one menu item is required.'})
+
         # Resolve table FK from table_identifier string if not already set
         table = validated_data.get('table')
         if not table:
@@ -68,44 +72,50 @@ class OrderSerializer(serializers.ModelSerializer):
                 )
             validated_data['table'] = table
 
-        # Generate unique order number
-        order_number = f"BHOJAN-{uuid.uuid4().hex[:5].upper()}"
-        order = Order.objects.create(order_number=order_number, **validated_data)
+        with transaction.atomic():
+            # Generate unique order number
+            order_number = f"BHOJAN-{uuid.uuid4().hex[:5].upper()}"
+            order = Order.objects.create(order_number=order_number, **validated_data)
 
-        # Trusted price calculation from database
-        subtotal = Decimal('0.00')
-        order_items_to_create = []
+            # Trusted price calculation from database
+            subtotal = Decimal('0.00')
+            order_items_to_create = []
 
-        for item_data in items_input:
-            menu_item = MenuItem.objects.get(id=item_data['menu_item_id'])
-            if not menu_item.is_available:
-                raise serializers.ValidationError(f"Item '{menu_item.name}' is currently sold out.")
+            for item_data in items_input:
+                try:
+                    menu_item = MenuItem.objects.get(id=item_data['menu_item_id'])
+                except MenuItem.DoesNotExist:
+                    raise serializers.ValidationError(
+                        {'order_items_input': f"Menu item {item_data['menu_item_id']} was not found."}
+                    )
+                if not menu_item.is_available:
+                    raise serializers.ValidationError(f"Item '{menu_item.name}' is currently sold out.")
 
-            qty = item_data['quantity']
-            line_total = menu_item.price * qty
-            subtotal += line_total
+                qty = item_data['quantity']
+                line_total = menu_item.price * qty
+                subtotal += line_total
 
-            order_items_to_create.append(
-                OrderItem(
-                    order=order,
-                    menu_item=menu_item,
-                    name=menu_item.name,
-                    price=menu_item.price,  # Authoritative price from DB
-                    quantity=qty,
-                    food_type=menu_item.food_type,
-                    special_notes=item_data.get('special_notes', '')
+                order_items_to_create.append(
+                    OrderItem(
+                        order=order,
+                        menu_item=menu_item,
+                        name=menu_item.name,
+                        price=menu_item.price,  # Authoritative price from DB
+                        quantity=qty,
+                        food_type=menu_item.food_type,
+                        special_notes=item_data.get('special_notes', '')
+                    )
                 )
-            )
 
-        OrderItem.objects.bulk_create(order_items_to_create)
+            OrderItem.objects.bulk_create(order_items_to_create)
 
-        # 5% Restaurant GST
-        tax = (subtotal * Decimal('0.05')).quantize(Decimal('0.01'))
-        total = subtotal + tax
+            # 5% Restaurant GST
+            tax = (subtotal * Decimal('0.05')).quantize(Decimal('0.01'))
+            total = subtotal + tax
 
-        order.subtotal = subtotal
-        order.tax = tax
-        order.total = total
-        order.save()
+            order.subtotal = subtotal
+            order.tax = tax
+            order.total = total
+            order.save()
 
         return order

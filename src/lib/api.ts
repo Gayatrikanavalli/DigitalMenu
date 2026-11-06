@@ -336,29 +336,27 @@ export const api = {
       specialInstructions?: string;
       cartItems: CartItem[];
     }): Promise<Order> => {
-      try {
-        const apiPayload = {
-          table_identifier: payload.tableNumber,
-          customer_name: payload.customerName,
-          customer_phone: payload.customerPhone || '',
-          special_instructions: payload.specialInstructions || '',
-          order_items_input: payload.cartItems.map((ci) => {
-            // IDs from Django are numeric strings like "1", "2".
-            // IDs from localStorage fallback are like "dish-1730000000000".
-            // Parse to integer: if the string is a valid positive integer use it
-            // directly, otherwise strip non-digits (last resort fallback).
-            const parsed = parseInt(ci.menuItem.id, 10);
-            const menuItemId = Number.isFinite(parsed) && parsed > 0
-              ? parsed
-              : parseInt(ci.menuItem.id.replace(/\D/g, ''), 10) || 1;
-            return {
-              menu_item_id: menuItemId,
-              quantity: ci.quantity,
-              special_notes: ci.specialNotes || '',
-            };
-          }),
+      const orderItemsInput = payload.cartItems.map((ci) => {
+        const parsed = parseInt(ci.menuItem.id, 10);
+        if (!Number.isFinite(parsed) || parsed <= 0) {
+          throw new Error('One or more menu items are invalid. Please refresh the menu and try again.');
+        }
+        return {
+          menu_item_id: parsed,
+          quantity: ci.quantity,
+          special_notes: ci.specialNotes || '',
         };
+      });
 
+      const apiPayload = {
+        table_identifier: payload.tableNumber,
+        customer_name: payload.customerName,
+        customer_phone: payload.customerPhone || '',
+        special_instructions: payload.specialInstructions || '',
+        order_items_input: orderItemsInput,
+      };
+
+      try {
         const response = await apiClient.post<any>('/orders', apiPayload);
         if (response.data && response.data.id) {
           const o = response.data;
@@ -389,10 +387,15 @@ export const api = {
           saveOrders([createdOrder, ...getOrders()]);
           return createdOrder;
         }
-      } catch (err) {
-        // Fallback
+        throw new Error('Order was not created by the server.');
+      } catch (err: any) {
+        const backendMessage =
+          err?.response?.data?.detail ||
+          err?.response?.data?.error ||
+          err?.response?.data?.message ||
+          err?.message;
+        throw new Error(backendMessage || 'Unable to place order. Please try again.');
       }
-      return createLocalOrder(payload);
     },
 
     updateStatus: async (orderId: string, status: OrderStatus): Promise<boolean> => {

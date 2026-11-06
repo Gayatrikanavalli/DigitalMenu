@@ -315,13 +315,13 @@ export default function App() {
       try {
         if (activeView === 'admin') {
           const staffOrders = await api.orders.list();
-          if (staffOrders.length && mounted) {
+          if (mounted) {
             setOrders(staffOrders);
             saveOrders(staffOrders);
           }
         } else if (activeView === 'kitchen') {
           const feed = await api.orders.kitchenFeed();
-          if (feed.length && mounted) {
+          if (mounted) {
             setOrders(feed);
             saveOrders(feed);
           }
@@ -339,7 +339,13 @@ export default function App() {
       }
     };
     void loadStaffOrders();
-    return () => { mounted = false };
+    const refreshInterval = window.setInterval(() => {
+      if (mounted) void loadStaffOrders();
+    }, 15000);
+    return () => {
+      mounted = false;
+      window.clearInterval(refreshInterval);
+    };
   }, [activeView, authChecked, isAuthenticated]);
 
   // Reset orders state when not authenticated: never expose cached order data
