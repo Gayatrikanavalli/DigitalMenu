@@ -25,7 +25,7 @@ class OrderSerializer(serializers.ModelSerializer):
     table_number = serializers.CharField(source='table.table_number', read_only=True)
     table_identifier = serializers.CharField(write_only=True, required=False)
     order_items_input = OrderCreateItemInputSerializer(many=True, write_only=True, required=False)
-    customer_phone = serializers.SerializerMethodField()
+    customer_phone = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = Order
@@ -37,11 +37,12 @@ class OrderSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['order_number', 'subtotal', 'tax', 'total', 'status']
 
-    def get_customer_phone(self, obj):
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
         request = self.context.get('request')
-        if request and request.user and request.user.is_authenticated:
-            return obj.customer_phone
-        return ''
+        if not (request and getattr(request, 'user', None) and request.user.is_authenticated):
+            data['customer_phone'] = ''
+        return data
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

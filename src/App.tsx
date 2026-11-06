@@ -153,6 +153,9 @@ export default function App() {
     setAuthState(null);
     setAuthChecked(true);
     clearCachedData();
+    setOrders([]);
+    saveOrders([]);
+    setConfirmedOrder(null);
     setStaffError('');
     setPath(ROUTES.customer);
     window.history.replaceState({}, '', ROUTES.customer);
