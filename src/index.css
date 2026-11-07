@@ -16,22 +16,23 @@
 
 /* Customer order form fields: keep typed text readable on desktop and mobile */
 .customer-field {
-  color: #0f172a;
-  -webkit-text-fill-color: #0f172a;
-  background-color: #ffffff;
-  caret-color: #0f172a;
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  background-color: #ffffff !important;
+  caret-color: #0f172a !important;
+  opacity: 1 !important;
 }
 
 .customer-field::placeholder {
-  color: #a8a29e;
-  -webkit-text-fill-color: #a8a29e;
-  opacity: 1;
+  color: #a8a29e !important;
+  -webkit-text-fill-color: #a8a29e !important;
+  opacity: 1 !important;
 }
 
 .customer-field:focus {
-  color: #0f172a;
-  -webkit-text-fill-color: #0f172a;
-  background-color: #ffffff;
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  background-color: #ffffff !important;
   border-color: #d97706;
   box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.3);
 }
@@ -40,19 +41,23 @@
 .customer-field:-webkit-autofill:hover,
 .customer-field:-webkit-autofill:focus,
 .customer-field:-webkit-autofill:active {
-  -webkit-text-fill-color: #0f172a;
-  -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  background-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
   transition: background-color 9999s ease-out 0s;
-  caret-color: #0f172a;
+  caret-color: #0f172a !important;
+  opacity: 1 !important;
 }
 
 @media (prefers-color-scheme: dark) {
   .customer-field {
-    color: #0f172a;
-    -webkit-text-fill-color: #0f172a;
-    background-color: #ffffff;
+    color: #0f172a !important;
+    -webkit-text-fill-color: #0f172a !important;
+    background-color: #ffffff !important;
   }
 }
+
 
 .no-scrollbar::-webkit-scrollbar {
   display: none;

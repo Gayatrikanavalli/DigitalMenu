@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { X, Plus, Minus, Trash2, ArrowRight, Utensils, QrCode } from 'lucide-react';
 import { CartItem, Order } from '../types';
 import { formatINR } from '../lib/storage';
@@ -28,9 +28,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   onOpenTableModal,
   onPlaceOrder,
 }) => {
-  const [customerName, setCustomerName] = useState('');
-  const [customerPhone, setCustomerPhone] = useState('');
-  const [specialInstructions, setSpecialInstructions] = useState('');
+  const customerNameRef = useRef<HTMLInputElement>(null);
+  const customerPhoneRef = useRef<HTMLInputElement>(null);
+  const specialInstructionsRef = useRef<HTMLTextAreaElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -40,12 +40,29 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     (sum, item) => sum + item.menuItem.price * item.quantity,
     0
   );
+  const hasUnavailableItems = cartItems.some(
+    (ci) => !ci.menuItem.isAvailable || ci.menuItem.isActive === false
+  );
   const tax = Number((subtotal * 0.05).toFixed(2)); // 5% GST
   const grandTotal = Number((subtotal + tax).toFixed(2));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (cartItems.length === 0) return;
+
+    const unavailableItems = cartItems.filter(
+      (ci) => !ci.menuItem.isAvailable || ci.menuItem.isActive === false
+    );
+    if (unavailableItems.length > 0) {
+      setErrorMsg(
+        `Some items are no longer available: ${unavailableItems.map((ci) => ci.menuItem.name).join(', ')}. Please remove them before checkout.`
+      );
+      return;
+    }
+
+    const customerName = customerNameRef.current?.value || '';
+    const customerPhone = customerPhoneRef.current?.value || '';
+    const specialInstructions = specialInstructionsRef.current?.value || '';
 
     if (!customerName.trim()) {
       setErrorMsg('Please enter your name for the table order ticket.');
@@ -61,9 +78,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
         specialInstructions: specialInstructions.trim(),
       });
       // Reset fields
-      setCustomerName('');
-      setCustomerPhone('');
-      setSpecialInstructions('');
+      if (customerNameRef.current) customerNameRef.current.value = '';
+      if (customerPhoneRef.current) customerPhoneRef.current.value = '';
+      if (specialInstructionsRef.current) specialInstructionsRef.current.value = '';
       onClose();
     } catch (err: any) {
       setErrorMsg(err?.message || 'Unable to place order. Please try again.');
@@ -209,11 +226,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     <input
                       type="text"
                       required
-                      value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
-                       style={{ color: '#0f172a', caretColor: '#0f172a', WebkitTextFillColor: '#0f172a' }}
+                      defaultValue=""
+                      ref={customerNameRef}
+                      style={{ color: '#0f172a', WebkitTextFillColor: '#0f172a', backgroundColor: '#ffffff', caretColor: '#0f172a', opacity: 1 }}
+
                         placeholder="e.g. Rahul Verma"
-                        className="customer-field w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-500/30 bg-white text-stone-900 placeholder:text-stone-400"
+                        className="customer-field w-full text-sm px-3 py-2 rounded-lg border border-[#d6d3d1] focus:outline-none focus:border-[#d97706] focus:ring-2 focus:ring-[#d97706]/30 bg-[#ffffff] text-[#0f172a] placeholder:text-[#a8a29e]"
+
 
                     />
                   </div>
@@ -224,11 +243,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     </label>
                     <input
                       type="tel"
-                      value={customerPhone}
-                      onChange={(e) => setCustomerPhone(e.target.value)}
-                       style={{ color: '#0f172a', caretColor: '#0f172a', WebkitTextFillColor: '#0f172a' }}
+                      defaultValue=""
+                      ref={customerPhoneRef}
+                      style={{ color: '#0f172a', WebkitTextFillColor: '#0f172a', backgroundColor: '#ffffff', caretColor: '#0f172a', opacity: 1 }}
+
                         placeholder="+91 98765 43210"
-                        className="customer-field w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-500/30 bg-white text-stone-900 placeholder:text-stone-400"
+                        className="customer-field w-full text-sm px-3 py-2 rounded-lg border border-[#d6d3d1] focus:outline-none focus:border-[#d97706] focus:ring-2 focus:ring-[#d97706]/30 bg-[#ffffff] text-[#0f172a] placeholder:text-[#a8a29e]"
+
 
                     />
                   </div>
@@ -239,10 +260,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     </label>
                     <textarea
                       rows={2}
-                      value={specialInstructions}
-                      onChange={(e) => setSpecialInstructions(e.target.value)}
-                      placeholder="e.g. Less spicy, send extra mint chutney, no dairy..."
-                       style={{ color: '#0f172a', caretColor: '#0f172a', WebkitTextFillColor: '#0f172a' }}
+                      defaultValue=""
+                      ref={specialInstructionsRef}
+                      style={{ color: '#0f172a', WebkitTextFillColor: '#0f172a', backgroundColor: '#ffffff', caretColor: '#0f172a', opacity: 1 }}
+
                         className="customer-field w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-500/30 bg-white text-stone-900 placeholder:text-stone-400 resize-none"
 
                     />
@@ -287,7 +308,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               <button
                 type="submit"
                 form="order-form"
-                disabled={isSubmitting}
+                disabled={isSubmitting || hasUnavailableItems}
                 className="w-full py-3 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 active:bg-amber-800 disabled:bg-stone-300 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
