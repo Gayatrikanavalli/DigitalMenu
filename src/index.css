@@ -14,7 +14,46 @@
   }
 }
 
-/* Custom scrollbar for horizontal categories */
+/* Customer order form fields: keep typed text readable on desktop and mobile */
+.customer-field {
+  color: #0f172a;
+  -webkit-text-fill-color: #0f172a;
+  background-color: #ffffff;
+  caret-color: #0f172a;
+}
+
+.customer-field::placeholder {
+  color: #a8a29e;
+  -webkit-text-fill-color: #a8a29e;
+  opacity: 1;
+}
+
+.customer-field:focus {
+  color: #0f172a;
+  -webkit-text-fill-color: #0f172a;
+  background-color: #ffffff;
+  border-color: #d97706;
+  box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.3);
+}
+
+.customer-field:-webkit-autofill,
+.customer-field:-webkit-autofill:hover,
+.customer-field:-webkit-autofill:focus,
+.customer-field:-webkit-autofill:active {
+  -webkit-text-fill-color: #0f172a;
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+  transition: background-color 9999s ease-out 0s;
+  caret-color: #0f172a;
+}
+
+@media (prefers-color-scheme: dark) {
+  .customer-field {
+    color: #0f172a;
+    -webkit-text-fill-color: #0f172a;
+    background-color: #ffffff;
+  }
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }

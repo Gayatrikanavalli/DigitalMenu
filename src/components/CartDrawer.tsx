@@ -211,9 +211,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       required
                       value={customerName}
                       onChange={(e) => setCustomerName(e.target.value)}
-                       style={{ color: '#0f172a', caretColor: '#0f172a' }}
-                       placeholder="e.g. Rahul Verma"
-                       className="w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-500/30 bg-white text-stone-900 placeholder:text-stone-400"
+                       style={{ color: '#0f172a', caretColor: '#0f172a', WebkitTextFillColor: '#0f172a' }}
+                        placeholder="e.g. Rahul Verma"
+                        className="customer-field w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-500/30 bg-white text-stone-900 placeholder:text-stone-400"
+
                     />
                   </div>
 
@@ -225,9 +226,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       type="tel"
                       value={customerPhone}
                       onChange={(e) => setCustomerPhone(e.target.value)}
-                       style={{ color: '#0f172a', caretColor: '#0f172a' }}
-                       placeholder="+91 98765 43210"
-                       className="w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-500/30 bg-white text-stone-900 placeholder:text-stone-400"
+                       style={{ color: '#0f172a', caretColor: '#0f172a', WebkitTextFillColor: '#0f172a' }}
+                        placeholder="+91 98765 43210"
+                        className="customer-field w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-500/30 bg-white text-stone-900 placeholder:text-stone-400"
+
                     />
                   </div>
 
@@ -240,8 +242,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       value={specialInstructions}
                       onChange={(e) => setSpecialInstructions(e.target.value)}
                       placeholder="e.g. Less spicy, send extra mint chutney, no dairy..."
-                       style={{ color: '#0f172a', caretColor: '#0f172a' }}
-                       className="w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-500/30 bg-white text-stone-900 placeholder:text-stone-400 resize-none"
+                       style={{ color: '#0f172a', caretColor: '#0f172a', WebkitTextFillColor: '#0f172a' }}
+                        className="customer-field w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-500/30 bg-white text-stone-900 placeholder:text-stone-400 resize-none"
+
                     />
                   </div>
 
