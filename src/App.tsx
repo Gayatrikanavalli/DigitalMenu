@@ -726,7 +726,7 @@ export default function App() {
                     <Sparkles className="w-3.5 h-3.5" />
                     <span>Royal Heritage Recommendations</span>
                   </div>
-                  <h2 className="text-xl sm:text-2xl font-bold font-serif text-stone-900">
+                  <h2 className="text-xl sm:text-2xl font-bold font-serif text-white">
                     Chef's Handpicked Specials
                   </h2>
                 </div>
@@ -752,12 +752,12 @@ export default function App() {
           <section className="mt-8 mb-12">
             <div className="flex items-center justify-between mb-5">
               <div>
-                <h2 className="text-xl sm:text-2xl font-bold font-serif text-stone-900">
+                <h2 className="text-xl sm:text-2xl font-bold font-serif text-white">
                   {selectedCategory === 'all'
                     ? 'All Dishes & Dum Delicacies'
                     : categories.find((c) => c.slug === selectedCategory)?.name || 'Menu'}
                 </h2>
-                <p className="text-xs text-stone-700 mt-0.5">
+                <p className="text-xs text-stone-300 mt-0.5">
                   Showing {filteredDishes.length} freshly prepared dishes
                   {dietFilter !== 'all' && ` (${dietFilter === 'veg' ? 'Pure Vegetarian' : 'Non-Vegetarian'})`}
                 </p>
