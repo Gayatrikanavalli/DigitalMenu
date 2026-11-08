@@ -65,7 +65,7 @@ export const Header: React.FC<HeaderProps> = ({
     <header className={`sticky top-0 z-40 backdrop-blur-md border-b ${activeView === 'customer' ? 'bg-[#0B0B0B]/95 border-amber-900/20' : 'bg-white/95 border-stone-200'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-4 lg:gap-8">
-          
+
           {/* Zone 1: Brand + Page Title */}
           <div className="flex items-center gap-4 shrink-0">
             <div className="w-9 h-9 rounded-lg bg-amber-600 text-white flex items-center justify-center font-bold text-lg shadow-sm shadow-amber-500/40">
@@ -115,16 +115,16 @@ export const Header: React.FC<HeaderProps> = ({
                 <>
                   <span className="text-sm font-medium text-amber-400 mr-1 transition-colors duration-200 hover:text-amber-300">Sort By</span>
                   <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="ml-2 text-sm px-2 py-1 rounded-md border border-amber-500/30 bg-[#303030] text-amber-400 font-medium focus:outline-none focus:border-amber-400 transition-colors"
-                >
-                  <option className="bg-[#303030] text-white" value="relevance">Recommended</option>
-                  <option className="bg-[#303030] text-white" value="price-low">Price: Low to High</option>
-                  <option className="bg-[#303030] text-white" value="price-high">Price: High to Low</option>
-                  <option className="bg-[#303030] text-white" value="name-asc">Name A-Z</option>
-                  <option className="bg-[#303030] text-white" value="veg-first">Veg first</option>
-                </select>
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="ml-2 text-sm px-2 py-1 rounded-md border border-amber-500/30 bg-[#303030] text-amber-400 font-medium focus:outline-none focus:border-amber-400 transition-colors"
+                  >
+                    <option className="bg-[#303030] text-white" value="relevance">Recommended</option>
+                    <option className="bg-[#303030] text-white" value="price-low">Price: Low to High</option>
+                    <option className="bg-[#303030] text-white" value="price-high">Price: High to Low</option>
+                    <option className="bg-[#303030] text-white" value="name-asc">Name A-Z</option>
+                    <option className="bg-[#303030] text-white" value="veg-first">Veg first</option>
+                  </select>
                 </>
               )}
             </nav>
@@ -164,12 +164,18 @@ export const Header: React.FC<HeaderProps> = ({
                   className="relative flex items-center justify-center w-10 h-10 rounded-lg border border-amber-500/40 bg-[#181818] hover:bg-amber-500/10 transition-all whitespace-nowrap"
                   aria-label="Restaurant location"
                 >
-                  <svg viewBox="0 0 24 24" className="w-5 h-5" aria-hidden="true">
-                    <path
-                      fillRule="evenodd"
-                      d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"
-                      fill="#F59E0B"
-                    />
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="#F59E0B"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+                    <circle cx="12" cy="10" r="2.5" />
                   </svg>
                 </button>
                 <button
@@ -241,15 +247,14 @@ export const Header: React.FC<HeaderProps> = ({
         <div className={`md:hidden flex items-center justify-between border-t py-2 text-xs font-medium overflow-x-auto no-scrollbar gap-4 ${isCustomer ? 'border-stone-800 text-stone-300' : 'border-stone-100 text-stone-600'}`}>
           <button
             onClick={() => onNavigate('customer')}
-            className={`whitespace-nowrap pb-1 ${
-              activeView === 'customer' ? 'text-amber-400 font-bold border-b-2 border-amber-400' : ''
-            }`}
+            className={`whitespace-nowrap pb-1 ${activeView === 'customer' ? 'text-amber-400 font-bold border-b-2 border-amber-400' : ''
+              }`}
           >
             Digital Menu
           </button>
           {isCustomer && (
             <>
-               <button
+              <button
                 onClick={() => onScrollTo('about')}
                 className="whitespace-nowrap pb-1 text-amber-400 font-medium transition-colors duration-200 hover:text-amber-300"
               >
