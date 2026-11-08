@@ -132,6 +132,7 @@ export default function App() {
 
   const menuSectionRef = useRef<HTMLDivElement>(null);
   const aboutSectionRef = useRef<HTMLDivElement>(null);
+  const specialCarouselRef = useRef<HTMLDivElement>(null);
   const contactSectionRef = useRef<HTMLDivElement>(null);
 
   const isAuthenticated = authState?.is_authenticated || false;
@@ -733,18 +734,40 @@ export default function App() {
               </div>
               </div>
 
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-                {specialDishes.slice(0, 4).map((dish) => (
-                  <MenuCard
-                    key={`special-${dish.id}`}
-                    item={dish}
-                    cartQuantity={getItemCartQty(dish.id)}
-                    onAddToCart={handleAddToCart}
-                    onUpdateQuantity={handleUpdateQuantity}
-                    isWishlisted={wishlist.includes(dish.id)}
-                    onToggleWishlist={toggleWishlist}
-                  />
-                ))}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => specialCarouselRef.current?.scrollBy({ left: -specialCarouselRef.current.clientWidth, behavior: 'smooth' })}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-[#181818]/80 border border-amber-900/40 text-amber-400 hover:bg-amber-500/20 flex items-center justify-center"
+                  aria-label="Previous specials"
+                >
+                  ‹
+                </button>
+                <div
+                  ref={specialCarouselRef}
+                  className="flex gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar px-12"
+                >
+                  {specialDishes.map((dish) => (
+                    <div key={`special-${dish.id}`} className="snap-start shrink-0 flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-[0_0_25%]">
+                      <MenuCard
+                        item={dish}
+                        cartQuantity={getItemCartQty(dish.id)}
+                        onAddToCart={handleAddToCart}
+                        onUpdateQuantity={handleUpdateQuantity}
+                        isWishlisted={wishlist.includes(dish.id)}
+                        onToggleWishlist={toggleWishlist}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => specialCarouselRef.current?.scrollBy({ left: specialCarouselRef.current.clientWidth, behavior: 'smooth' })}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-[#181818]/80 border border-amber-900/40 text-amber-400 hover:bg-amber-500/20 flex items-center justify-center"
+                  aria-label="Next specials"
+                >
+                  ›
+                </button>
               </div>
             </section>
           )}

@@ -576,6 +576,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       {item.isActive !== false ? 'Active' : 'Inactive'}
                     </button>
 
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); onUpdateMenuItem(item.id, { isSpecial: !item.isSpecial }); }}
+                      className={`px-2.5 py-1 rounded text-xs font-semibold border ${
+                        item.isSpecial
+                          ? 'bg-amber-50 text-amber-800 border-amber-200'
+                          : 'bg-stone-100 text-stone-500 border-stone-200'
+                      }`}
+                    >
+                      {item.isSpecial ? 'Special' : 'Mark Special'}
+                    </button>
+
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleOpenEditDish(item)}
