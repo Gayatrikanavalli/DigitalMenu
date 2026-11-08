@@ -119,6 +119,7 @@ export default function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState<boolean>(false);
+  const [isLocationOpen, setIsLocationOpen] = useState<boolean>(false);
 
   // Modals
   const [isTableModalOpen, setIsTableModalOpen] = useState<boolean>(false);
@@ -610,6 +611,7 @@ export default function App() {
         onOpenCart={() => setIsCartOpen(true)}
         wishlistCount={wishlist.length}
         onOpenWishlist={() => setIsWishlistOpen(true)}
+        onOpenLocation={() => setIsLocationOpen(true)}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         sortBy={sortBy}
@@ -1181,6 +1183,36 @@ export default function App() {
                 ))}
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Location Modal */}
+      {isLocationOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => setIsLocationOpen(false)}>
+          <div className="w-full max-w-2xl bg-[#181818] rounded-2xl border border-amber-900/30 p-5" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-white">Restaurant Location</h3>
+              <button onClick={() => setIsLocationOpen(false)} className="text-stone-400 hover:text-white">✕</button>
+            </div>
+            <p className="text-sm text-stone-300 mb-3">42 Heritage Boulevard, Indiranagar, Bengaluru, KA 560038</p>
+            <div className="rounded-xl overflow-hidden border border-amber-900/30">
+              <iframe
+                title="Restaurant location"
+                src="https://www.google.com/maps?q=42+Heritage+Boulevard,+Indiranagar,+Bengaluru,+KA+560038&output=embed"
+                className="w-full h-72"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
+            <a
+              href="https://www.google.com/maps/dir/?api=1&destination=42+Heritage+Boulevard,+Indiranagar,+Bengaluru,+KA+560038"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-900 text-sm font-bold"
+            >
+              Get Directions
+            </a>
           </div>
         </div>
       )}

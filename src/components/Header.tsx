@@ -18,6 +18,7 @@ interface HeaderProps {
   cartCount: number;
   cartTotal: number;
   onOpenCart: () => void;
+  onOpenLocation?: () => void;
   wishlistCount?: number;
   onOpenWishlist?: () => void;
   searchQuery: string;
@@ -47,6 +48,7 @@ export const Header: React.FC<HeaderProps> = ({
   cartCount,
   cartTotal,
   onOpenCart,
+  onOpenLocation,
   wishlistCount = 0,
   onOpenWishlist,
   searchQuery,
@@ -155,6 +157,20 @@ export const Header: React.FC<HeaderProps> = ({
                   aria-label="Toggle search"
                 >
                   <Search className="w-5 h-5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={onOpenLocation}
+                  className="relative flex items-center justify-center w-10 h-10 rounded-lg border border-amber-500/40 bg-[#181818] hover:bg-amber-500/10 transition-all whitespace-nowrap"
+                  aria-label="Restaurant location"
+                >
+                  <svg viewBox="0 0 24 24" className="w-5 h-5" aria-hidden="true">
+                    <path
+                      fillRule="evenodd"
+                      d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"
+                      fill="#F59E0B"
+                    />
+                  </svg>
                 </button>
                 <button
                   type="button"
