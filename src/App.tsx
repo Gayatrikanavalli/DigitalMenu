@@ -721,15 +721,16 @@ export default function App() {
           {selectedCategory === 'all' && !searchQuery && specialDishes.length > 0 && (
             <section className="mt-8 mb-6">
               <div className="flex items-center justify-between mb-4">
-                <div>
-                  <div className="flex items-center gap-1.5 text-xs text-amber-700 font-bold uppercase tracking-wider">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>Royal Heritage Recommendations</span>
-                  </div>
-                  <h2 className="text-xl sm:text-2xl font-bold font-serif text-white">
-                    Chef's Handpicked Specials
-                  </h2>
+              <div>
+                <div className="flex items-center gap-1.5 text-xs text-amber-400 font-bold uppercase tracking-[0.25em]">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Royal Heritage Recommendations</span>
                 </div>
+                <h2 className="mt-1 text-2xl sm:text-3xl font-bold font-serif bg-gradient-to-r from-amber-300 via-amber-500 to-amber-700 bg-clip-text text-transparent">
+                  Chef's Handpicked Specials
+                </h2>
+                <div className="mt-2 h-px w-20 bg-gradient-to-r from-amber-500 to-transparent" />
+              </div>
               </div>
 
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
@@ -752,12 +753,13 @@ export default function App() {
           <section className="mt-8 mb-12">
             <div className="flex items-center justify-between mb-5">
               <div>
-                <h2 className="text-xl sm:text-2xl font-bold font-serif text-white">
+                <h2 className="text-2xl sm:text-3xl font-bold font-serif bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text text-transparent tracking-tight">
                   {selectedCategory === 'all'
                     ? 'All Dishes & Dum Delicacies'
                     : categories.find((c) => c.slug === selectedCategory)?.name || 'Menu'}
                 </h2>
-                <p className="text-xs text-stone-300 mt-0.5">
+                <div className="mt-2 h-px w-24 bg-gradient-to-r from-amber-500/80 to-transparent" />
+                <p className="text-xs text-stone-400 mt-2 tracking-wide">
                   Showing {filteredDishes.length} freshly prepared dishes
                   {dietFilter !== 'all' && ` (${dietFilter === 'veg' ? 'Pure Vegetarian' : 'Non-Vegetarian'})`}
                 </p>

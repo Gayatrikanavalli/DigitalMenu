@@ -42,7 +42,7 @@ export const FoodAssistant: React.FC<FoodAssistantProps> = ({ menuItems, categor
     }
   }, [messages, open]);
 
-  const available = (items: MenuItem[]) => items.filter((d) => d.isAvailable);
+  const available = (items: MenuItem[]) => items.filter((d) => d.isAvailable && d.isActive !== false);
 
   const answerFor = (q: string): { text: string; dishes?: MenuItem[] } => {
     const low = q.toLowerCase();

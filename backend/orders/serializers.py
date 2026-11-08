@@ -89,8 +89,8 @@ class OrderSerializer(serializers.ModelSerializer):
                     raise serializers.ValidationError(
                         {'order_items_input': f"Menu item {item_data['menu_item_id']} was not found."}
                     )
-                if not menu_item.is_available:
-                    raise serializers.ValidationError(f"Item '{menu_item.name}' is currently sold out.")
+                if menu_item.is_deleted or not menu_item.is_active or not menu_item.is_available:
+                    raise serializers.ValidationError(f"Item '{menu_item.name}' is currently unavailable.")
 
                 qty = item_data['quantity']
                 line_total = menu_item.price * qty

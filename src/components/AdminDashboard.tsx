@@ -554,7 +554,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
                   <div className="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between text-xs">
                     <button
-                      onClick={() => onToggleAvailability(item.id)}
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); onToggleAvailability(item.id); }}
                       className={`px-2.5 py-1 rounded text-xs font-semibold ${
                         item.isAvailable
                           ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
@@ -564,7 +565,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       {item.isAvailable ? 'In Stock' : 'Out of Stock'}
                     </button>
                     <button
-                      onClick={() => onUpdateMenuItem(item.id, { isActive: item.isActive === false ? true : false })}
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); onUpdateMenuItem(item.id, { isActive: item.isActive === false ? true : false }); }}
                       className={`px-2.5 py-1 rounded text-xs font-semibold border ${
                         item.isActive !== false
                           ? 'bg-blue-50 text-blue-800 border-blue-200'
