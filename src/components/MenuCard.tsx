@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MenuItem } from '../types';
 import { formatINR } from '../lib/storage';
-import { Plus, Minus, Clock, UtensilsCrossed } from 'lucide-react';
+import { Plus, Minus, Clock, UtensilsCrossed, Heart } from 'lucide-react';
 
 interface MenuCardProps {
   item: MenuItem;
@@ -9,6 +9,8 @@ interface MenuCardProps {
   onAddToCart: (item: MenuItem) => void;
   onUpdateQuantity: (itemId: string, newQty: number) => void;
   onQuickView?: (item: MenuItem) => void;
+  isWishlisted?: boolean;
+  onToggleWishlist?: (itemId: string) => void;
 }
 
 export const MenuCard: React.FC<MenuCardProps> = ({
@@ -16,6 +18,8 @@ export const MenuCard: React.FC<MenuCardProps> = ({
   cartQuantity,
   onAddToCart,
   onUpdateQuantity,
+  isWishlisted = false,
+  onToggleWishlist,
 }) => {
   const [hasFailed, setHasFailed] = useState(!item.image);
 
@@ -42,7 +46,7 @@ export const MenuCard: React.FC<MenuCardProps> = ({
           </div>
         )}
 
-        {!item.isAvailable && (
+        {(!item.isAvailable || item.isActive === false) && (
           <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
             <span className="text-xs text-white font-bold bg-stone-900/80 px-3 py-1 rounded-lg">
               Sold Out
@@ -93,9 +97,19 @@ export const MenuCard: React.FC<MenuCardProps> = ({
             {formatINR(item.price)}
           </span>
 
-          {!item.isAvailable ? (
-            <span className="text-xs text-stone-500 font-medium">Unavailable</span>
-          ) : cartQuantity > 0 ? (
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => onToggleWishlist?.(item.id)}
+              aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+              className="w-8 h-8 rounded-lg border border-stone-700 flex items-center justify-center hover:border-red-500 transition-colors"
+            >
+              <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-stone-400'}`} />
+            </button>
+
+            {(!item.isAvailable || item.isActive === false) ? (
+              <span className="text-xs text-stone-500 font-medium">Unavailable</span>
+            ) : cartQuantity > 0 ? (
             <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/40 rounded-lg p-1">
               <button
                 onClick={() => onUpdateQuantity(item.id, cartQuantity - 1)}
@@ -124,6 +138,7 @@ export const MenuCard: React.FC<MenuCardProps> = ({
               <span>Add</span>
             </button>
           )}
+        </div>
         </div>
       </div>
     </div>

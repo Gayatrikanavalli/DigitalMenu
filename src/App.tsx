@@ -94,9 +94,31 @@ export default function App() {
   const demoMode =
     typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_DEMO_MODE === 'true';
 
-  // Cart state
+  const [wishlist, setWishlist] = useState<string[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('bhojan_wishlist') || '[]');
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem('bhojan_wishlist', JSON.stringify(wishlist));
+  }, [wishlist]);
+
+  const toggleWishlist = (id: string) => {
+    setWishlist((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
+
+  const wishlistItems = useMemo(
+    () => menuItems.filter((m) => wishlist.includes(m.id)),
+    [menuItems, wishlist]
+  );
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
+  const [isWishlistOpen, setIsWishlistOpen] = useState<boolean>(false);
 
   // Modals
   const [isTableModalOpen, setIsTableModalOpen] = useState<boolean>(false);
@@ -462,7 +484,7 @@ export default function App() {
 
   // Chef Specials items
   const specialDishes = useMemo(() => {
-    return menuItems.filter((dish) => dish.isSpecial && dish.isAvailable);
+    return menuItems.filter((dish) => dish.isSpecial && dish.isAvailable && dish.isActive !== false);
   }, [menuItems]);
 
   // Filter menu items
@@ -586,6 +608,8 @@ export default function App() {
         cartCount={cartCount}
         cartTotal={cartTotal}
         onOpenCart={() => setIsCartOpen(true)}
+        wishlistCount={wishlist.length}
+        onOpenWishlist={() => setIsWishlistOpen(true)}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         sortBy={sortBy}
@@ -714,6 +738,8 @@ export default function App() {
                     cartQuantity={getItemCartQty(dish.id)}
                     onAddToCart={handleAddToCart}
                     onUpdateQuantity={handleUpdateQuantity}
+                    isWishlisted={wishlist.includes(dish.id)}
+                    onToggleWishlist={toggleWishlist}
                   />
                 ))}
               </div>
@@ -763,6 +789,8 @@ export default function App() {
                     cartQuantity={getItemCartQty(dish.id)}
                     onAddToCart={handleAddToCart}
                     onUpdateQuantity={handleUpdateQuantity}
+                    isWishlisted={wishlist.includes(dish.id)}
+                    onToggleWishlist={toggleWishlist}
                   />
                 ))}
               </div>
@@ -1008,10 +1036,14 @@ export default function App() {
             saveMenuItems(items);
           }}
           onUpdateMenuItem={async (id, updates) => {
-            await api.menu.update(id, updates);
-            const items = await api.menu.list({ include_inactive: true });
-            setMenuItems(items);
-            saveMenuItems(items);
+            try {
+              await api.menu.update(id, updates);
+              const items = await api.menu.list({ include_inactive: true });
+              setMenuItems(items);
+              saveMenuItems(items);
+            } catch (err: any) {
+              setStaffError(err?.response?.data?.detail || err?.message || 'Failed to update menu item. Please try again.');
+            }
           }}
           onDeleteMenuItem={async (id) => {
             await api.menu.delete(id);
@@ -1021,10 +1053,14 @@ export default function App() {
           }}
           onToggleAvailability={async (id) => {
             const current = menuItems.find((m) => m.id === id);
-            await api.menu.update(id, { isAvailable: !(current?.isAvailable ?? true) });
-            const items = await api.menu.list({ include_inactive: true });
-            setMenuItems(items);
-            saveMenuItems(items);
+            try {
+              await api.menu.update(id, { isAvailable: !(current?.isAvailable ?? true) });
+              const items = await api.menu.list({ include_inactive: true });
+              setMenuItems(items);
+              saveMenuItems(items);
+            } catch (err: any) {
+              setStaffError(err?.response?.data?.detail || err?.message || 'Failed to update stock status. Please try again.');
+            }
           }}
           onAddTable={async (table) => {
             await api.tables.create(table);
@@ -1105,6 +1141,48 @@ export default function App() {
           }}
         />
         </>
+      )}
+
+      {/* Wishlist Modal */}
+      {isWishlistOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => setIsWishlistOpen(false)}>
+          <div className="w-full max-w-md bg-[#181818] rounded-2xl border border-amber-900/30 p-5 max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-white">Wishlist</h3>
+              <button onClick={() => setIsWishlistOpen(false)} className="text-stone-400 hover:text-white">✕</button>
+            </div>
+            {wishlistItems.length === 0 ? (
+              <p className="text-stone-400 text-sm">No favourites yet.</p>
+            ) : (
+              <div className="space-y-3">
+                {wishlistItems.map((item) => (
+                  <div key={item.id} className="flex items-center gap-3 bg-[#292929] rounded-xl p-3">
+                    <img src={item.image} alt={item.name} className="w-12 h-12 rounded-lg object-cover" />
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-bold text-white truncate">{item.name}</div>
+                      <div className="text-xs text-amber-400">{formatINR(item.price)}</div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleAddToCart(item)}
+                      className="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-900 text-xs font-bold"
+                    >
+                      Add
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => toggleWishlist(item.id)}
+                      className="text-red-500 hover:text-red-400"
+                      aria-label="Remove from wishlist"
+                    >
+                      <Heart className="w-4 h-4 fill-red-500" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       )}
 
       {/* Cart Slide-over Drawer */}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Search, UtensilsCrossed, QrCode, LogOut } from 'lucide-react';
+import { ShoppingBag, Search, UtensilsCrossed, QrCode, LogOut, Heart } from 'lucide-react';
 import { ActiveView, StaffUser } from '../types';
 import { formatINR } from '../lib/storage';
 
@@ -18,6 +18,8 @@ interface HeaderProps {
   cartCount: number;
   cartTotal: number;
   onOpenCart: () => void;
+  wishlistCount?: number;
+  onOpenWishlist?: () => void;
   searchQuery: string;
   setSearchQuery: (q: string) => void;
   sortBy: string;
@@ -45,6 +47,8 @@ export const Header: React.FC<HeaderProps> = ({
   cartCount,
   cartTotal,
   onOpenCart,
+  wishlistCount = 0,
+  onOpenWishlist,
   searchQuery,
   setSearchQuery,
   sortBy,
@@ -151,6 +155,20 @@ export const Header: React.FC<HeaderProps> = ({
                   aria-label="Toggle search"
                 >
                   <Search className="w-5 h-5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={onOpenWishlist}
+                  className="relative flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-500/40 bg-[#181818] hover:bg-amber-500/10 text-amber-400 font-medium text-xs sm:text-sm shadow-sm transition-all whitespace-nowrap"
+                  aria-label="Wishlist"
+                >
+                  <Heart className="w-4 h-4" />
+                  <span className="hidden sm:inline">Wishlist</span>
+                  {wishlistCount > 0 && (
+                    <span className="px-1.5 py-0.5 rounded-full bg-red-500 text-white font-bold text-xs tabular-nums">
+                      {wishlistCount}
+                    </span>
+                  )}
                 </button>
                 <button
                   onClick={onOpenCart}
