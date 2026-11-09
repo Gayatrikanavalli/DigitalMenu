@@ -22,7 +22,7 @@ const ITEMS: CatItem[] = [
   { name: 'South Indian Specials', slug: 'south-indian', img: 'https://images.unsplash.com/photo-1612874742237-652622190843?auto=format&fit=crop&w=300&q=80' },
   { name: 'Chinese Specials', slug: 'chinese', img: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=300&q=80' },
   { name: 'Burgers', slug: 'burgers', img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=300&q=80' },
-  { name: 'Dosa', slug: 'dosa', img: 'https://images.unsplash.com/photo-1603894574373-67ac1862a0c9?auto=format&fit=crop&w=300&q=80' },
+  { name: 'Dosa', slug: 'dosa', img: 'https://images.unsplash.com/photo-1751560455942-f859f1215826?q=80&w=1966&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D' },
   { name: 'Idli', slug: 'idli', img: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=300&q=80' },
   { name: 'Fresh Salads', slug: 'salads', img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=300&q=80' },
   { name: 'Pasta', slug: 'pasta', img: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=300&q=80' },
