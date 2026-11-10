@@ -12,7 +12,7 @@
 
 ---
 
-## 2. Project Directory Structure
+## 2. Project Directory Structures
 
 ```
 digitalmenu/
