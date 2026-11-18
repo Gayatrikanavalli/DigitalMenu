@@ -29,6 +29,11 @@ export interface MenuItem {
   preparationTimeMins?: number;
   rating?: number;
   reviewCount?: number;
+  discountPercentage?: number;
+  offerActive?: boolean;
+  offerStartDate?: string | null;
+  offerEndDate?: string | null;
+  isOfferActive?: boolean;
 }
 
 export interface RestaurantTable {
@@ -77,7 +82,7 @@ export interface CartItem {
   specialNotes?: string;
 }
 
-export type ActiveView = 'customer' | 'admin' | 'kitchen';
+export type ActiveView = 'customer' | 'admin' | 'kitchen' | 'menu' | 'offers' | 'about' | 'contact';
 
 export type StaffRole = 'manager' | 'kitchen';
 

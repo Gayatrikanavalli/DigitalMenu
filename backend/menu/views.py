@@ -1,11 +1,11 @@
-from rest_framework import viewsets, filters, permissions, status
+﻿from rest_framework import viewsets, filters, permissions, status
 from rest_framework.response import Response
+from django.db.models import Sum, Value, Count, Q
+from django.db.models.functions import Coalesce
 from .models import Category, MenuItem
 from .serializers import CategorySerializer, MenuItemSerializer
 from accounts.permissions import IsManagerOrReadOnly
 from accounts.models import get_staff_profile
-from django.db.models import Sum, Value
-from django.db.models.functions import Coalesce
 
 try:
     from django_filters.rest_framework import DjangoFilterBackend
@@ -14,15 +14,25 @@ except ImportError:
     HAS_DJANGO_FILTERS = False
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsManagerOrReadOnly]
 
+    def get_queryset(self):
+        return Category.objects.annotate(
+            _items_count=Count('items', filter=Q(items__is_deleted=False), distinct=True)
+        )
+
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
+        if instance.items.filter(is_deleted=False).exists():
+            return Response(
+                {'detail': 'Cannot delete a category that still has dishes assigned. Reassign or remove its dishes first.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        # Prevent cascade-deleting any remaining (e.g. soft-deleted) item records
         if instance.items.exists():
             return Response(
-                {'detail': 'Cannot delete a category that still has menu items. Reassign or remove its dishes first.'},
+                {'detail': 'Cannot delete a category while dish records are still associated with it.'},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         return super().destroy(request, *args, **kwargs)

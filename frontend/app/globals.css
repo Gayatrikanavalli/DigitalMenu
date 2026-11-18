@@ -22,3 +22,35 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Menu product grid: container-responsive, compact cards, no stretching */
+.bq-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 300px));
+  gap: 1.25rem;
+  align-items: start;
+  justify-content: start;
+}
+.bq-menu-grid > * {
+  width: 100%;
+  max-width: 320px;
+}
+
+/* Menu card image: 16:9, consistent compact sizing */
+.bq-menu-img-wrapper {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  background: transparent;
+  aspect-ratio: 16 / 9;
+}
+
+.bq-menu-img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 12px;
+  display: block;
+}

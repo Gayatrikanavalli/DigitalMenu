@@ -41,7 +41,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
 
   return (
     <motion.section
-      className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-stone-900 text-white my-4 sm:my-6 border border-[#D4AF37]/70 shadow-[0_0_20px_rgba(212,175,55,0.22)]"
+      className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-amber-50 text-stone-900 my-4 sm:my-6 border border-amber-100 shadow-sm"
       initial="hidden"
       animate="visible"
       variants={cVariants}
@@ -52,13 +52,12 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
           src={HERO_IMAGE}
           alt="Royal Indian Dining Feast Spread"
           referrerPolicy="no-referrer"
-          className="w-full h-full object-cover opacity-45"
+          className="w-full h-full object-cover opacity-30"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-stone-950/95 via-stone-950/80 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-transparent to-transparent opacity-80" />
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-50/80 via-white to-transparent" />
       </div>
 
-      {/* Animated golden border light traveling along the rounded rectangle */}
+      {/* Animated subtle accent border */}
       {!reduced && (
         <motion.div
           aria-hidden
@@ -66,7 +65,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
           style={{
             padding: '1.5px',
             background:
-              'conic-gradient(from 0deg, transparent 0deg, rgba(212,175,55,0.15) 20deg, rgba(255,223,128,1) 55deg, rgba(212,175,55,0.95) 90deg, rgba(212,175,55,0.15) 130deg, transparent 180deg, transparent 360deg)',
+              'conic-gradient(from 0deg, transparent 0deg, rgba(212,175,55,0.25) 20deg, rgba(255,223,128,1) 55deg, rgba(212,175,55,0.95) 90deg, rgba(212,175,55,0.25) 130deg, transparent 180deg, transparent 360deg)',
             WebkitMask:
               'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
             WebkitMaskComposite: 'xor',
@@ -79,23 +78,22 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
       {reduced && (
         <div
           aria-hidden
-          className="absolute inset-0 rounded-2xl sm:rounded-3xl pointer-events-none z-20 border border-amber-500/40"
+          className="absolute inset-0 rounded-2xl sm:rounded-3xl pointer-events-none z-20 border border-amber-200/60"
         />
       )}
 
       {/* Content Container */}
       <motion.div className="relative z-10 px-6 sm:px-10 lg:px-12 py-10 sm:py-14 max-w-3xl" variants={iVariants}>
         {/* Subtle trust marker without pill enclosures */}
-        <motion.div variants={iVariants} className="flex items-center gap-2 text-amber-400 text-xs font-semibold tracking-wider uppercase mb-3">
+        <motion.div variants={iVariants} className="flex items-center gap-2 text-amber-600 text-xs font-semibold tracking-wider uppercase mb-3">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Authentic Royal Mughlai & Coastal Recipes</span>
-          <span className="text-stone-500">·</span>
+          <span className="text-stone-400">·</span>
           <span>Slow Cooked On Charcoal Embers</span>
         </motion.div>
 
         <motion.h1
-          className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight font-serif text-balance"
-          style={{ textShadow: '0 0 24px rgba(245,158,11,0.22)' }}
+          className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-stone-900 leading-tight font-serif text-balance"
           variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
         >
           {heading.map((word, i) => (
@@ -109,20 +107,20 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
           ))}
         </motion.h1>
 
-        <motion.p variants={iVariants} className="mt-3 sm:mt-4 text-stone-300 text-sm sm:text-base leading-relaxed max-w-xl">
+        <motion.p variants={iVariants} className="mt-3 sm:mt-4 text-stone-600 text-sm sm:text-base leading-relaxed max-w-xl">
           Order seamlessly straight from your table. Each dish is hand-crafted with freshly ground spices, aged Basmati rice, and slow-simmered rich curries.
         </motion.p>
 
         {/* Highlights Row */}
-        <motion.div variants={iVariants} className="mt-6 flex flex-wrap items-center gap-y-2 gap-x-6 text-xs text-stone-300">
+        <motion.div variants={iVariants} className="mt-6 flex flex-wrap items-center gap-y-2 gap-x-6 text-xs text-stone-500">
           <div className="flex items-center gap-1.5">
-            <Clock className="w-4 h-4 text-amber-400" />
+            <Clock className="w-4 h-4 text-amber-600" />
             <span>Average preparation: 15–20 mins</span>
           </div>
-          <span className="hidden sm:inline text-stone-600">·</span>
+          <span className="hidden sm:inline text-stone-300">·</span>
           <div className="flex items-center gap-1.5">
-            <QrCode className="w-4 h-4 text-amber-400" />
-            <span>Serving at Table: <strong className="text-white font-semibold">{activeTable}</strong></span>
+            <QrCode className="w-4 h-4 text-amber-600" />
+            <span>Serving at Table: <strong className="text-stone-900 font-semibold">{activeTable}</strong></span>
           </div>
         </motion.div>
 
@@ -132,7 +130,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             whileHover={reduced ? {} : { scale: 1.04, y: -2 }}
             whileTap={reduced ? {} : { scale: 0.97 }}
             onClick={onExploreMenu}
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-amber-600 hover:bg-amber-500 active:bg-amber-700 text-white font-semibold text-sm shadow-md transition-all whitespace-nowrap"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white font-semibold text-sm shadow-md transition-all whitespace-nowrap"
           >
             <span>Explore Menu & Order</span>
             <ArrowDown className="w-4 h-4" />
@@ -142,9 +140,9 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             whileHover={reduced ? {} : { scale: 1.04, y: -2 }}
             whileTap={reduced ? {} : { scale: 0.97 }}
             onClick={onOpenTableModal}
-            className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 active:bg-white/25 text-stone-200 border border-white/20 text-xs sm:text-sm font-medium backdrop-blur-sm transition-all whitespace-nowrap"
+            className="inline-flex items-center gap-2 px-4 py-3 rounded-xl border border-amber-200 bg-white hover:bg-amber-50 text-amber-600 text-xs sm:text-sm font-medium transition-all whitespace-nowrap"
           >
-            <QrCode className="w-4 h-4 text-amber-400" />
+            <QrCode className="w-4 h-4 text-amber-600" />
             <span>Switch / Scan Table QR</span>
           </motion.button>
         </motion.div>

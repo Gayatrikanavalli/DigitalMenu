@@ -29,7 +29,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             return [IsKitchenStaff()]
         if self.action == 'list':
             return [IsStaff()]
-        # retrieve / track: public so customers can check their own order status.
+        # retrieve / track / my_orders: public so customers can check their own order status.
         return [permissions.AllowAny()]
 
     def get_queryset(self):
@@ -66,6 +66,21 @@ class OrderViewSet(viewsets.ModelViewSet):
         active_orders = self.get_queryset().filter(status__in=['pending', 'preparing', 'ready'])
         serializer = self.get_serializer(active_orders, many=True)
         return Response(serializer.data)
+    @action(detail=False, methods=['get'], url_path='my-orders')
+    def my_orders(self, request):
+        """Public: fetch orders for the current customer session by known order numbers or table."""
+        numbers_raw = request.query_params.get('numbers', '')
+        table = (request.query_params.get('table') or '').strip()
+        numbers = [n.strip() for n in numbers_raw.split(',') if n and n.strip()]
+        if numbers:
+            qs = Order.objects.prefetch_related('items').filter(order_number__in=numbers)
+        elif table:
+            qs = Order.objects.prefetch_related('items').filter(table__table_number__iexact=table)
+        else:
+            qs = Order.objects.none()
+        qs = qs.order_by('-created_at')[:50]
+        serializer = self.get_serializer(qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['get'], url_path='track/(?P<order_number>[^/.]+)')
     def track(self, request, order_number=None):

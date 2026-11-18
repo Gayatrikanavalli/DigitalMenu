@@ -26,9 +26,29 @@ class TableViewSet(viewsets.ModelViewSet):
     serializer_class = RestaurantTableSerializer
     permission_classes = [IsManagerOrReadOnly]
 
+    def get_object(self):
+        # Accept either numeric pk or table_number for detail actions (e.g. generate_qr)
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        lookup_value = self.kwargs.get(lookup_url_kwarg)
+        if lookup_value is not None:
+            qs = self.filter_queryset(self.get_queryset())
+            # try pk first
+            try:
+                obj = qs.get(pk=lookup_value)
+            except Exception:
+                obj = None
+            if obj is None:
+                obj = qs.filter(table_number__iexact=str(lookup_value)).first()
+            if obj is not None:
+                self.check_object_permissions(self.request, obj)
+                return obj
+        return super().get_object()
+
     def perform_create(self, serializer):
         table = serializer.save()
-        self._generate_table_qr(table)
+        # Preserve existing QR mappings: only generate if missing
+        if not table.qr_code_image:
+            self._generate_table_qr(table)
 
     def _generate_table_qr(self, table):
         """Generates and saves QR code using Python qrcode library."""
@@ -54,6 +74,7 @@ class TableViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post', 'get'])
     def generate_qr(self, request, pk=None):
         table = self.get_object()
+        # Regenerate only when explicitly requested for this action
         self._generate_table_qr(table)
         frontend_url = _get_frontend_url()
         qr_target_url = f"{frontend_url}/?table={table.table_number}"

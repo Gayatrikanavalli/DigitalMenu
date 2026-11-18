@@ -31,15 +31,15 @@ export const DishCarousel: React.FC<DishCarouselProps> = ({ dishes, onAddToCart 
   if (featured.length === 0) return null;
 
   return (
-    <section className="bg-[#0B0B0B] py-8">
+    <section className="bg-white py-8">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-serif font-bold text-white">Featured Dishes</h2>
+          <h2 className="text-xl font-serif font-bold text-stone-900">Featured Dishes</h2>
           <div className="flex gap-2">
-            <button onClick={() => scroll(-1)} className="p-2 rounded-lg bg-[#181818] border border-amber-900/30 text-amber-400 hover:bg-amber-500/10">
+            <button onClick={() => scroll(-1)} className="p-2 rounded-lg bg-white border border-stone-200 text-stone-700 hover:bg-stone-50 shadow-sm">
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <button onClick={() => scroll(1)} className="p-2 rounded-lg bg-[#181818] border border-amber-900/30 text-amber-400 hover:bg-amber-500/10">
+            <button onClick={() => scroll(1)} className="p-2 rounded-lg bg-white border border-stone-200 text-stone-700 hover:bg-stone-50 shadow-sm">
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
@@ -59,7 +59,7 @@ export const DishCarousel: React.FC<DishCarouselProps> = ({ dishes, onAddToCart 
               variants={reduced ? { hidden: { opacity: 1, y: 0 }, visible: { opacity: 1, y: 0 } } : cardVariants}
             >
               <motion.div
-                className="bg-[#181818] rounded-2xl border border-amber-900/30 overflow-hidden h-full flex flex-col items-center pt-6 pb-4 px-4"
+                className="bg-white rounded-2xl border border-stone-200 overflow-hidden h-full flex flex-col items-center pt-6 pb-4 px-4 shadow-sm"
                 whileHover={reduced ? {} : { y: -6, scale: 1.015 }}
                 transition={{ duration: 0.25, ease: 'easeOut' }}
               >
@@ -69,14 +69,14 @@ export const DishCarousel: React.FC<DishCarouselProps> = ({ dishes, onAddToCart 
                       className="absolute inset-[-5px] rounded-full pointer-events-none"
                       style={{
                         background:
-                          'conic-gradient(from 0deg, rgba(245,158,11,0.0) 0deg, rgba(245,158,11,0.55) 70deg, rgba(251,191,36,0.85) 110deg, rgba(245,158,11,0.0) 180deg, rgba(245,158,11,0.0) 360deg)',
+                          'conic-gradient(from 0deg, rgba(245,158,11,0.0) 0deg, rgba(245,158,11,0.4) 70deg, rgba(251,191,36,0.85) 110deg, rgba(245,158,11,0.0) 180deg, rgba(245,158,11,0.0) 360deg)',
                       }}
                       animate={{ rotate: 360 }}
                       transition={{ duration: 7, repeat: Infinity, ease: 'linear' }}
                     />
                   )}
                   <div
-                    className="relative w-full h-full overflow-hidden border-2 border-amber-500/60 shadow-[0_0_0_3px_rgba(245,158,11,0.15)]"
+                    className="relative w-full h-full overflow-hidden border-2 border-amber-500/40 shadow-[0_0_0_3px_rgba(245,158,11,0.15)]"
                     style={{ aspectRatio: '1 / 1', borderRadius: '50%' }}
                   >
                     <motion.img
@@ -94,7 +94,7 @@ export const DishCarousel: React.FC<DishCarouselProps> = ({ dishes, onAddToCart 
                         className="absolute inset-0 pointer-events-none"
                         style={{
                           background:
-                            'linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%)',
+                            'linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%)',
                           borderRadius: '50%',
                         }}
                         initial={{ x: '-100%' }}
@@ -105,15 +105,15 @@ export const DishCarousel: React.FC<DishCarouselProps> = ({ dishes, onAddToCart 
                   </div>
                 </div>
                 <div className="p-4 w-full text-center">
-                  <h3 className="text-white font-bold text-sm mb-1 line-clamp-1">{dish.name}</h3>
-                  <p className="text-stone-400 text-xs line-clamp-2 mb-2">{dish.description}</p>
+                  <h3 className="text-stone-900 font-bold text-sm mb-1 line-clamp-1">{dish.name}</h3>
+                  <p className="text-stone-500 text-xs line-clamp-2 mb-2">{dish.description}</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-amber-400 font-bold">{formatINR(dish.price)}</span>
+                    <span className="text-amber-600 font-bold">{formatINR(dish.price)}</span>
                     <motion.button
                       whileHover={reduced ? {} : { scale: 1.06 }}
                       whileTap={reduced ? {} : { scale: 0.95 }}
                       onClick={() => onAddToCart(dish)}
-                      className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black text-xs font-bold rounded-lg"
+                      className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-lg shadow-sm"
                     >
                       Add
                     </motion.button>

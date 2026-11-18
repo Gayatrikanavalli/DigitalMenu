@@ -8,6 +8,7 @@ const KEYS = {
   ORDERS: 'bhojan_orders_v2',
   ACTIVE_TABLE: 'bhojan_active_table_v2',
   ACTIVE_ORDER_ID: 'bhojan_active_order_id_v2',
+  MY_ORDER_NUMBERS: 'bhojan_my_order_numbers_v1',
 };
 
 const LEGACY_MENU_IMAGE_FIXES: Record<string, { from: string; to: string }> = {
@@ -170,7 +171,7 @@ export function getCategories(): Category[] {
       return INITIAL_CATEGORIES;
     }
     const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed) || parsed.length < INITIAL_CATEGORIES.length) {
+    if (!Array.isArray(parsed) || parsed.length === 0) {
       localStorage.setItem(KEYS.CATEGORIES, JSON.stringify(INITIAL_CATEGORIES));
       return INITIAL_CATEGORIES;
     }
@@ -292,6 +293,27 @@ export function setActiveOrderId(id: string | null) {
   } else {
     localStorage.removeItem(KEYS.ACTIVE_ORDER_ID);
   }
+  notifyListeners();
+}
+
+export function getMyOrderNumbers(): string[] {
+  try {
+    const raw = localStorage.getItem(KEYS.MY_ORDER_NUMBERS);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.filter((n) => typeof n === 'string' && n.trim()) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function addMyOrderNumber(orderNumber: string) {
+  const num = String(orderNumber || '').trim();
+  if (!num) return;
+  const existing = getMyOrderNumbers();
+  if (existing.some((n) => n.toUpperCase() === num.toUpperCase())) return;
+  const updated = [num, ...existing].slice(0, 50);
+  localStorage.setItem(KEYS.MY_ORDER_NUMBERS, JSON.stringify(updated));
   notifyListeners();
 }
 

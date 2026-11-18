@@ -287,7 +287,7 @@ class Migration(migrations.Migration):
 import axios, { AxiosInstance } from 'axios';
 
 export const apiClient: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api',
+  baseURL: (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_API_URL) || 'http://localhost:8000/api',
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',

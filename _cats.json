@@ -1,0 +1,122 @@
+﻿[
+    {
+        "id":  1,
+        "name":  "Dum Biryani",
+        "slug":  "biryani",
+        "icon":  "Flame",
+        "order":  1,
+        "items_count":  9
+    },
+    {
+        "id":  2,
+        "name":  "Starters \u0026 Tandoor",
+        "slug":  "starters",
+        "icon":  "Sparkles",
+        "order":  2,
+        "items_count":  8
+    },
+    {
+        "id":  3,
+        "name":  "Indian Meals \u0026 Curries",
+        "slug":  "curries",
+        "icon":  "Soup",
+        "order":  3,
+        "items_count":  7
+    },
+    {
+        "id":  4,
+        "name":  "Breads \u0026 Rice",
+        "slug":  "breads",
+        "icon":  "Wheat",
+        "order":  4,
+        "items_count":  7
+    },
+    {
+        "id":  5,
+        "name":  "Royal Desserts",
+        "slug":  "desserts",
+        "icon":  "Cookie",
+        "order":  5,
+        "items_count":  10
+    },
+    {
+        "id":  6,
+        "name":  "Beverages \u0026 Lassi",
+        "slug":  "beverages",
+        "icon":  "Coffee",
+        "order":  6,
+        "items_count":  3
+    },
+    {
+        "id":  7,
+        "name":  "South Indian Specials",
+        "slug":  "south-indian",
+        "icon":  "UtensilsCrossed",
+        "order":  7,
+        "items_count":  3
+    },
+    {
+        "id":  8,
+        "name":  "Chinese Specials",
+        "slug":  "chinese",
+        "icon":  "UtensilsCrossed",
+        "order":  8,
+        "items_count":  3
+    },
+    {
+        "id":  9,
+        "name":  "Burgers",
+        "slug":  "burgers",
+        "icon":  "UtensilsCrossed",
+        "order":  9,
+        "items_count":  4
+    },
+    {
+        "id":  10,
+        "name":  "Dosa",
+        "slug":  "dosa",
+        "icon":  "UtensilsCrossed",
+        "order":  10,
+        "items_count":  2
+    },
+    {
+        "id":  11,
+        "name":  "Idli",
+        "slug":  "idli",
+        "icon":  "UtensilsCrossed",
+        "order":  11,
+        "items_count":  2
+    },
+    {
+        "id":  12,
+        "name":  "Fresh Salads",
+        "slug":  "salads",
+        "icon":  "UtensilsCrossed",
+        "order":  12,
+        "items_count":  2
+    },
+    {
+        "id":  13,
+        "name":  "Pasta",
+        "slug":  "pasta",
+        "icon":  "UtensilsCrossed",
+        "order":  13,
+        "items_count":  4
+    },
+    {
+        "id":  14,
+        "name":  "Ice Cream",
+        "slug":  "ice-cream",
+        "icon":  "UtensilsCrossed",
+        "order":  14,
+        "items_count":  4
+    },
+    {
+        "id":  15,
+        "name":  "Pizza",
+        "slug":  "pizza",
+        "icon":  "UtensilsCrossed",
+        "order":  15,
+        "items_count":  3
+    }
+]

@@ -41,6 +41,10 @@ class MenuItem(models.Model):
     tags = models.JSONField(default=list, blank=True)
     spiciness = models.CharField(max_length=10, choices=(('mild', 'Mild'), ('medium', 'Medium'), ('spicy', 'Spicy')), default='medium')
     preparation_time_mins = models.PositiveIntegerField(default=15)
+    discount_percentage = models.PositiveIntegerField(default=0, help_text='Discount percentage (0–99). Set > 0 to show on Offers page.')
+    offer_active = models.BooleanField(default=False, help_text='Enable to show this dish as an active offer when dates/discount are valid.')
+    offer_start_date = models.DateField(null=True, blank=True, help_text='Optional offer start date.')
+    offer_end_date = models.DateField(null=True, blank=True, help_text='Optional offer expiry date.')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -1,214 +1,255 @@
-import React, { useState } from 'react';
-import { ShoppingBag, Search, UtensilsCrossed, QrCode, LogOut, Heart } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ShoppingBag, Search, QrCode, LogOut, Heart, Menu as MenuIcon, X, Home, UtensilsCrossed, Tag, Info, Phone } from 'lucide-react';
 import { ActiveView, StaffUser } from '../types';
 import { formatINR } from '../lib/storage';
 
 interface HeaderProps {
   activeView: ActiveView;
+  currentPath: string;
   isAuthenticated: boolean;
   user: StaffUser | null;
   isManager: boolean;
   isKitchenStaff: boolean;
-  onNavigate: (view: ActiveView) => void;
-  onScrollTo: (section: string) => void;
+  onNavigate: (view: string) => void;
   onLogin: (username: string, password: string) => void;
   onLogout: () => void;
   activeTable: string;
-  onOpenTableModal: () => void;
   cartCount: number;
   cartTotal: number;
   onOpenCart: () => void;
-  onOpenLocation?: () => void;
   wishlistCount?: number;
   onOpenWishlist?: () => void;
-  searchQuery: string;
-  setSearchQuery: (q: string) => void;
-  sortBy: string;
-  setSortBy: (s: string) => void;
+  searchQuery?: string;
+  setSearchQuery?: (q: string) => void;
+  onOpenLocation?: () => void;
+  onOpenCategoryDrawer?: () => void;
 }
 
-const STAFF_TITLES: Record<ActiveView, { title: string; subtitle: string }> = {
-  customer: { title: 'Digital Menu', subtitle: 'Browse our menu and place orders' },
-  admin: { title: 'Admin Dashboard', subtitle: 'Manage menu, tables, orders & reports' },
-  kitchen: { title: 'Kitchen Display', subtitle: 'View orders & update preparation status' },
+const STAFF_TITLES: Record<ActiveView, { title: string }> = {
+  customer: { title: 'Menu' },
+  menu: { title: 'Menu' },
+  offers: { title: 'Offers' },
+  about: { title: 'About' },
+  contact: { title: 'Contact' },
+  admin: { title: 'Admin Dashboard' },
+  kitchen: { title: 'Kitchen Display' },
 };
 
 export const Header: React.FC<HeaderProps> = ({
   activeView,
+  currentPath,
   isAuthenticated,
   user,
   isManager,
   isKitchenStaff,
   onNavigate,
-  onScrollTo,
   onLogin,
   onLogout,
   activeTable,
-  onOpenTableModal,
   cartCount,
   cartTotal,
   onOpenCart,
-  onOpenLocation,
   wishlistCount = 0,
   onOpenWishlist,
   searchQuery,
   setSearchQuery,
-  sortBy,
-  setSortBy,
+  onOpenLocation,
+  onOpenCategoryDrawer,
 }) => {
-  const [showSearchMobile, setShowSearchMobile] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isCustomer = activeView === 'customer';
   const isStaff = activeView === 'admin' || activeView === 'kitchen';
   const staffTitle = STAFF_TITLES[activeView];
+  const isMenuPage = currentPath === '/menu';
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [mobileMenuOpen]);
 
   return (
-    <header className={`sticky top-0 z-40 backdrop-blur-md border-b ${activeView === 'customer' ? 'bg-[#0B0B0B]/95 border-amber-900/20' : 'bg-white/95 border-stone-200'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 gap-4 lg:gap-8">
+    <header className={`sticky top-0 z-40 border-b bg-white border-stone-200 shadow-sm`}>
+      <div className={`mx-auto px-4 sm:px-6 lg:px-8 h-14 ${isMenuPage ? 'max-w-none' : 'max-w-7xl'}`}>
+        <div className="flex items-center justify-between h-full">
 
-          {/* Zone 1: Brand + Page Title */}
-          <div className="flex items-center gap-4 shrink-0">
-            <div className="w-9 h-9 rounded-lg bg-amber-600 text-white flex items-center justify-center font-bold text-lg shadow-sm shadow-amber-500/40">
+          {/* Zone 1: Brand */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className={`flex items-center gap-3 shrink-0 ${isMenuPage && isCustomer ? 'hidden lg:hidden' : ''}`}
+          >
+            <div className="w-8 h-8 rounded-lg bg-amber-600 text-white flex items-center justify-center font-bold text-lg shadow-sm shadow-amber-500/40">
               भ
             </div>
             <div className="flex flex-col leading-tight">
-              <span className={`text-xl font-bold tracking-tight font-serif ${isCustomer ? 'text-white' : 'text-stone-900'} ${isStaff ? 'hidden sm:inline' : 'block'}`}>
-                Bhojan<span className={`${isCustomer ? 'text-amber-400' : 'text-amber-600'} font-sans font-extrabold`}>QR</span>
+              <span className="text-lg font-bold tracking-tight font-serif text-stone-900">
+                Bhojan<span className="text-amber-600 font-sans font-extrabold">QR</span>
               </span>
-              {!isStaff && (
-                <span className={`text-[11px] font-medium tracking-wide uppercase block ${isCustomer ? 'text-stone-400' : 'text-stone-700'}`}>
-                  Fine Dining & QR Order
+              {isCustomer ? (
+                <span className="text-[10px] font-medium text-stone-500 uppercase tracking-wider mt-0.5">
+                  BhojanQR Digital Menu
+                </span>
+              ) : (
+                <span className="text-[11px] font-medium text-stone-500 uppercase tracking-wider mt-0.5">
+                  {staffTitle.title}
                 </span>
               )}
-              {activeView === 'admin' && (
-                <div className="flex flex-col leading-tight">
-                  <span className="text-[22px] font-semibold text-stone-900 sm:text-[24px]">
-                    Admin Dashboard
-                  </span>
-                </div>
-              )}
             </div>
+          </motion.div>
+
+          {/* Zone 2: Navigation & Search */}
+          <div className="hidden lg:flex items-center gap-4 flex-1 max-w-[380px] shrink-0">
+            {!(isMenuPage && isCustomer) && (
+              <nav className="hidden lg:flex items-center gap-5 text-sm font-medium text-stone-600">
+                {isCustomer && (
+                  <>
+                    <motion.button
+                      whileHover={{ y: -2 }}
+                      whileTap={{ y: 0 }}
+                      onClick={() => onNavigate('customer')}
+                      className={`pb-0.5 font-medium whitespace-nowrap transition-colors ${currentPath === '/' || currentPath === '/customer' ? 'text-amber-600 font-bold border-b-2 border-amber-600' : 'text-stone-600 hover:text-stone-900'}`}
+                    >
+                      Home
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ y: -2 }}
+                      whileTap={{ y: 0 }}
+                      onClick={() => onNavigate('menu')}
+                      className={`pb-0.5 font-medium whitespace-nowrap transition-colors ${currentPath === '/menu' || currentPath.startsWith('/menu/') ? 'text-amber-600 font-bold border-b-2 border-amber-600' : 'text-stone-600 hover:text-stone-900'}`}
+                    >
+                      Menu
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ y: -2 }}
+                      whileTap={{ y: 0 }}
+                      onClick={() => onNavigate('offers')}
+                      className={`pb-0.5 font-medium whitespace-nowrap transition-colors ${currentPath === '/offers' ? 'text-amber-600 font-bold border-b-2 border-amber-600' : 'text-stone-600 hover:text-stone-900'}`}
+                    >
+                      Offers
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ y: -2 }}
+                      whileTap={{ y: 0 }}
+                      onClick={() => onNavigate('/my-orders')}
+                      className={`pb-0.5 font-medium whitespace-nowrap transition-colors ${currentPath === '/my-orders' ? 'text-amber-600 font-bold border-b-2 border-amber-600' : 'text-stone-600 hover:text-stone-900'}`}
+                    >
+                      My Orders
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ y: -2 }}
+                      whileTap={{ y: 0 }}
+                      onClick={() => onNavigate('about')}
+                      className={`pb-0.5 font-medium whitespace-nowrap transition-colors ${currentPath === '/about' ? 'text-amber-600 font-bold border-b-2 border-amber-600' : 'text-stone-600 hover:text-stone-900'}`}
+                    >
+                      About
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ y: -2 }}
+                      whileTap={{ y: 0 }}
+                      onClick={() => onNavigate('contact')}
+                      className={`pb-0.5 font-medium whitespace-nowrap transition-colors ${currentPath === '/contact' ? 'text-amber-600 font-bold border-b-2 border-amber-600' : 'text-stone-600 hover:text-stone-900'}`}
+                    >
+                      Contact
+                    </motion.button>
+                  </>
+                )}
+              </nav>
+            )}
+            {!(isMenuPage && isCustomer) && (
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+                <input
+                  type="text"
+                  value={searchQuery || ''}
+                  onChange={(e) => setSearchQuery?.(e.target.value)}
+                  placeholder="Search dishes..."
+                  className="w-full bg-white text-stone-900 text-xs sm:text-sm pl-10 pr-8 py-2 sm:py-2.5 rounded-lg border border-stone-200 focus:outline-none focus:border-amber-500 placeholder:text-stone-400 transition-colors"
+                />
+              </div>
+            )}
+            {!(isMenuPage && isCustomer) && (
+              <button
+                type="button"
+                onClick={() => onOpenLocation()}
+                className="flex items-center justify-center w-9 h-9 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 text-amber-600 font-medium text-xs shadow-sm transition-all whitespace-nowrap"
+                aria-label="Restaurant location"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="#F59E0B"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+                  <circle cx="12" cy="10" r="2.5" />
+                </svg>
+              </button>
+            )}
           </div>
 
-          {/* Zone 2: Navigation Links (Customer only) */}
-          {isCustomer && (
-            <nav className="hidden md:flex items-center gap-6 text-sm font-medium shrink-0">
-              <button
-                onClick={() => onNavigate('customer')}
-                className="whitespace-nowrap pb-0.5 text-amber-400 border-b-2 border-amber-400 font-semibold transition-colors"
-              >
-                Digital Menu
-              </button>
-              <button
-                onClick={() => onScrollTo('about')}
-                className="whitespace-nowrap pb-0.5 text-amber-400 font-medium transition-colors duration-200 hover:text-amber-300"
-              >
-                About Us
-              </button>
-              <button
-                onClick={() => onScrollTo('contact')}
-                className="whitespace-nowrap pb-0.5 text-amber-400 font-medium transition-colors duration-200 hover:text-amber-300"
-              >
-                Contact
-              </button>
-              {isCustomer && (
-                <>
-                  <span className="text-sm font-medium text-amber-400 mr-1 transition-colors duration-200 hover:text-amber-300">Sort By</span>
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="ml-2 text-sm px-2 py-1 rounded-md border border-amber-500/30 bg-[#303030] text-amber-400 font-medium focus:outline-none focus:border-amber-400 transition-colors"
-                  >
-                    <option className="bg-[#303030] text-white" value="relevance">Recommended</option>
-                    <option className="bg-[#303030] text-white" value="price-low">Price: Low to High</option>
-                    <option className="bg-[#303030] text-white" value="price-high">Price: High to Low</option>
-                    <option className="bg-[#303030] text-white" value="name-asc">Name A-Z</option>
-                    <option className="bg-[#303030] text-white" value="veg-first">Veg first</option>
-                  </select>
-                </>
-              )}
-            </nav>
-          )}
-
-          {/* Center Search (Customer desktop only) */}
-          {isCustomer && (
-            <div className="hidden lg:flex items-center flex-1 max-w-xs relative">
-              <Search className="w-4 h-4 absolute left-3 text-stone-400" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search dishes..."
-                className="w-full bg-[#292929] hover:bg-[#292929] focus:bg-[#292929] text-white text-xs pl-9 pr-8 py-2 rounded-lg border border-[#B89436] focus:border-[#F5C542] focus:outline-none transition-colors placeholder:text-stone-400"
-              />
-              {searchQuery && (
-                <button onClick={() => setSearchQuery('')} className="absolute right-2 text-stone-400 hover:text-stone-700">✕</button>
-              )}
-            </div>
-          )}
-
-          {/* Zone 3: Actions */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* Zone 3: Actions - SINGLE set for all screens */}
+          <div className="flex items-center gap-2 shrink-0">
             {isCustomer && (
               <>
-                <button
-                  onClick={() => setShowSearchMobile(!showSearchMobile)}
-                  className="lg:hidden p-2 text-stone-600 hover:text-stone-900 rounded-md hover:bg-stone-100"
-                  aria-label="Toggle search"
-                >
-                  <Search className="w-5 h-5" />
-                </button>
+                {/* Hamburger - visible on ALL screens */}
                 <button
                   type="button"
-                  onClick={onOpenLocation}
-                  className="relative flex items-center justify-center w-10 h-10 rounded-lg border border-amber-500/40 bg-[#181818] hover:bg-amber-500/10 transition-all whitespace-nowrap"
-                  aria-label="Restaurant location"
+                  onClick={() => {
+                    if (currentPath === '/menu') {
+                      onOpenCategoryDrawer?.();
+                    } else {
+                      setMobileMenuOpen(true);
+                    }
+                  }}
+                  className="p-2.5 text-stone-600 hover:text-stone-900 rounded-md hover:bg-stone-100"
+                  aria-label="Open navigation menu"
                 >
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="#F59E0B"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
-                    <circle cx="12" cy="10" r="2.5" />
-                  </svg>
+                  <MenuIcon className="w-5 h-5" />
                 </button>
-                <button
+
+                {/* Wishlist icon */}
+                <motion.button
                   type="button"
-                  onClick={onOpenWishlist}
-                  className="relative flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-500/40 bg-[#181818] hover:bg-amber-500/10 text-amber-400 font-medium text-xs sm:text-sm shadow-sm transition-all whitespace-nowrap"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => onOpenWishlist()}
+                  className="p-2.5 text-stone-600 hover:text-stone-900 rounded-md hover:bg-stone-100 transition-colors"
                   aria-label="Wishlist"
                 >
-                  <Heart className="w-4 h-4" />
-                  <span className="hidden sm:inline">Wishlist</span>
-                  {wishlistCount > 0 && (
-                    <span className="px-1.5 py-0.5 rounded-full bg-red-500 text-white font-bold text-xs tabular-nums">
-                      {wishlistCount}
-                    </span>
-                  )}
-                </button>
-                <button
-                  onClick={onOpenCart}
-                  className="relative flex items-center gap-2.5 px-3.5 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white font-medium text-xs sm:text-sm shadow-sm transition-all whitespace-nowrap"
+                  <Heart className="w-5 h-5" />
+                </motion.button>
+
+                {/* My Order button - SINGLE instance */}
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.02, y: -1 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="relative flex items-center gap-2 px-3.5 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white font-medium text-sm shadow-sm transition-colors whitespace-nowrap"
+                  onClick={() => onOpenCart()}
                 >
                   <ShoppingBag className="w-4 h-4" />
-                  <span className="hidden sm:inline">My Order</span>
+                  <span>My Order</span>
                   {cartCount > 0 && (
                     <span className="px-1.5 py-0.5 rounded-full bg-white text-amber-700 font-bold text-xs tabular-nums">
                       {cartCount}
                     </span>
                   )}
                   {cartTotal > 0 && (
-                    <span className="hidden md:inline border-l border-amber-500/60 pl-2 font-semibold tabular-nums">
+                    <span className="hidden lg:inline border-l border-amber-500/40 pl-2 font-semibold tabular-nums">
                       {formatINR(cartTotal)}
                     </span>
                   )}
-                </button>
+                </motion.button>
               </>
             )}
             {isStaff && isAuthenticated && (
@@ -222,62 +263,99 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </div>
         </div>
-
-        {/* Mobile Search Input expansion (Customer only) */}
-        {showSearchMobile && isCustomer && (
-          <div className="lg:hidden pb-3 pt-1">
-            <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-2.5 text-stone-400" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search dishes..."
-                className="w-full bg-[#292929] text-white text-xs pl-9 pr-8 py-2 rounded-lg border border-[#B89436] focus:outline-none focus:border-[#F5C542] placeholder:text-stone-400"
-                autoFocus
-              />
-              {searchQuery && (
-                <button onClick={() => setSearchQuery('')} className="absolute right-2 top-2.5 text-stone-400 hover:text-stone-700">✕</button>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Mobile navigation tab strip */}
-        <div className={`md:hidden flex items-center justify-between border-t py-2 text-xs font-medium overflow-x-auto no-scrollbar gap-4 ${isCustomer ? 'border-stone-800 text-stone-300' : 'border-stone-100 text-stone-600'}`}>
-          <button
-            onClick={() => onNavigate('customer')}
-            className={`whitespace-nowrap pb-1 ${activeView === 'customer' ? 'text-amber-400 font-bold border-b-2 border-amber-400' : ''
-              }`}
-          >
-            Digital Menu
-          </button>
-          {isCustomer && (
-            <>
-              <button
-                onClick={() => onScrollTo('about')}
-                className="whitespace-nowrap pb-1 text-amber-400 font-medium transition-colors duration-200 hover:text-amber-300"
-              >
-                About Us
-              </button>
-              <button
-                onClick={() => onScrollTo('contact')}
-                className="whitespace-nowrap pb-1 text-amber-400 font-medium transition-colors duration-200 hover:text-amber-300"
-              >
-                Contact
-              </button>
-            </>
-          )}
-          {isStaff && isAuthenticated && (
-            <button
-              onClick={onLogout}
-              className="whitespace-nowrap pb-1 text-stone-500 font-medium"
-            >
-              Sign Out
-            </button>
-          )}
-        </div>
       </div>
+
+      {/* Navigation drawer */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-40 bg-stone-900/30"
+              onClick={() => setMobileMenuOpen(false)}
+              aria-hidden="true"
+            />
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              className="fixed inset-y-0 left-0 z-50 w-[220px] max-w-[85vw] bg-[#FFF1E0] shadow-xl flex flex-col overflow-x-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between p-4 border-b border-amber-200/70">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-10 h-10 rounded-lg bg-amber-500/15 text-amber-700 flex items-center justify-center font-bold text-xl shadow-sm">भ</div>
+                  <div className="flex flex-col leading-tight">
+                    <span className="text-base font-bold tracking-tight font-serif text-stone-900">
+                      Bhojan<span className="text-amber-700 font-sans font-extrabold">QR</span>
+                    </span>
+                    <span className="text-[10px] font-medium text-stone-500 uppercase tracking-wider mt-0.5">Digital Menu</span>
+                  </div>
+                </div>
+                <button type="button" onClick={() => setMobileMenuOpen(false)} className="text-stone-500 hover:text-stone-800 p-1 rounded-md hover:bg-amber-100/70 transition-colors" aria-label="Close menu">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="flex-1 overflow-y-auto overflow-x-hidden py-4 px-3 space-y-1.5">
+                {[
+                  { label: 'Home', path: 'customer', match: currentPath === '/' || currentPath === '/customer', icon: Home },
+                  { label: 'Menu', path: 'menu', match: currentPath === '/menu' || currentPath.startsWith('/menu/'), icon: UtensilsCrossed },
+                  { label: 'Offers', path: 'offers', match: currentPath === '/offers', icon: Tag },
+                  { label: 'My Orders', path: '/my-orders', match: currentPath === '/my-orders' || currentPath === '/orders', icon: ShoppingBag },
+                  { label: 'About', path: 'about', match: currentPath === '/about', icon: Info },
+                  { label: 'Contact', path: 'contact', match: currentPath === '/contact', icon: Phone },
+                ].map((link) => {
+                  const Icon = link.icon;
+                  return (
+                    <button
+                      key={link.label}
+                      type="button"
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        if (link.path === 'orders') {
+                          onOpenCart();
+                        } else {
+                          onNavigate(link.path);
+                        }
+                      }}
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                        link.match
+                          ? 'bg-amber-500 text-white font-semibold shadow-md'
+                          : 'text-stone-700 hover:bg-amber-100/70'
+                      }`}
+                    >
+                      <Icon className={`w-5 h-5 ${link.match ? 'text-white' : 'text-stone-600'}`} strokeWidth={1.8} />
+                      <span>{link.label}</span>
+                    </button>
+                  );
+                })}
+                {isCustomer && (
+                  <div className="mt-4 pt-3 border-t border-amber-200/70 space-y-1">
+                    <button
+                      type="button"
+                      onClick={() => { setMobileMenuOpen(false); onOpenWishlist?.(); }}
+                      className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium text-stone-700 hover:bg-amber-100/70 transition-colors"
+                    >
+                      Wishlist
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium text-stone-700 hover:bg-amber-100/70 transition-colors"
+                    >
+                      Table {activeTable}
+                    </button>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

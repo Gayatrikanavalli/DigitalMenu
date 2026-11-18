@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html><body>
+<pre id="out">Loading...</pre>
+<script type="module">
+  import { api } from '/src/lib/api.ts';
+  const out = document.getElementById('out');
+  try {
+    const cats = await api.categories.list({ strict: true });
+    out.textContent = 'OK len=' + (cats && cats.length) + '\n' + JSON.stringify(cats, null, 2);
+    console.log('CATS', cats);
+  } catch (e) {
+    out.textContent = 'ERROR: ' + (e && e.message) + '\n' + (e && e.stack);
+    console.error('CATERR', e);
+  }
+</script>
+</body></html>
