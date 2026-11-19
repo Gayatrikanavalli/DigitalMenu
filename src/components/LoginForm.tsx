@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import {
-  ShieldCheck,
-  ArrowRight,
   ArrowLeft,
-  ChefHat,
+  ArrowRight,
   AlertCircle,
+  ChefHat,
   Eye,
   EyeOff,
+  Lock,
+  User,
   UtensilsCrossed,
 } from 'lucide-react';
-import adminBg from '../assets/images/admin-login-bg.jpg';
 
 export type LoginIntended = 'admin' | 'kitchen';
 
@@ -59,72 +59,99 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-[#120a05]">
-      {/* Full-screen blurred restaurant background (local asset) */}
+    <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-[#1a120d] p-4 sm:p-6 lg:p-8">
+      {/* Separate blurred background layer (real local food photograph) */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 scale-110 bg-cover bg-center bg-no-repeat blur-2xl sm:blur-3xl transform-gpu"
-        style={{ backgroundImage: `url(${adminBg})` }}
+        className="pointer-events-none absolute inset-[-20px] bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: "url('/assets/restaurant-food-bg.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          filter: 'blur(12px)',
+          transform: 'scale(1.08)',
+        }}
       />
-      {/* Warm dark overlay for readability */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#1a0f08]/75 via-[#2a1407]/65 to-[#0f0906]/80"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(251,146,60,0.12),transparent_60%)]"
-      />
+      {/* Subtle dark overlay for readability (solid, no gradient background) */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-black/45" />
 
-      <div className="relative z-10 flex min-h-screen w-full items-center justify-center p-4 sm:p-6 lg:p-8">
-        <div className="w-full max-w-[440px] rounded-3xl border border-white/15 bg-[#1b120c]/55 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl backdrop-saturate-150 sm:p-8">
+      <div className="relative z-10 w-full max-w-[460px] sm:max-w-[520px]">
+        <div
+          className="w-full rounded-3xl border border-white/20 p-6 shadow-2xl shadow-black/50 sm:p-8 md:p-10"
+          style={{
+            backgroundColor: 'rgba(42, 27, 18, 0.62)',
+            backdropFilter: 'blur(18px)',
+            WebkitBackdropFilter: 'blur(18px)',
+          }}
+        >
           {/* Navigation */}
-          <div className="mb-6 flex items-center justify-between gap-3">
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
             <button
               type="button"
               onClick={onReturnToCustomer}
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-white/80 transition-colors hover:text-amber-400 sm:text-sm"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-white/85 transition-colors hover:text-amber-400 sm:text-sm"
             >
               <ArrowLeft className="h-4 w-4" />
               <span>Back to Customer Menu</span>
             </button>
-            <span className="font-mono text-[10px] uppercase tracking-wider text-white/45 sm:text-xs">Staff Login</span>
+            <span className="font-mono text-[10px] uppercase tracking-wider text-white/50 sm:text-xs">
+              Staff Login
+            </span>
           </div>
 
           {/* Header */}
-          <div className="mb-6 flex items-start gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-white shadow-lg shadow-amber-900/30 ring-1 ring-amber-300/30">
+          <div className="mb-7 flex items-start gap-4">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-white shadow-lg shadow-amber-900/40 ring-1 ring-white/20">
               <Icon className="h-6 w-6" />
             </div>
             <div className="min-w-0">
-              <h2 className="font-serif text-xl font-bold leading-tight text-white sm:text-2xl">{title}</h2>
-              <p className="mt-1 text-xs leading-relaxed text-white/70 sm:text-sm">{subtitle}</p>
+              <h2 className="font-serif text-2xl font-bold leading-tight text-white sm:text-3xl">
+                {intended === 'admin' ? (
+                  <>
+                    Restaurant <span className="text-amber-400">Admin Portal</span>
+                  </>
+                ) : (
+                  <>
+                    Kitchen <span className="text-amber-400">Display System</span>
+                  </>
+                )}
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-white/75 sm:text-[15px]">{subtitle}</p>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label htmlFor="staff-username" className="mb-1.5 block text-xs font-semibold text-white/90 sm:text-sm">
+              <label htmlFor="staff-username" className="mb-1.5 block text-sm font-semibold text-white/95">
                 Username
               </label>
-              <input
-                id="staff-username"
-                name="username"
-                type="text"
-                autoComplete="username"
-                required
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Enter username"
-                className="w-full rounded-lg border border-white/15 bg-white/10 px-3.5 py-2.5 text-sm text-white placeholder:text-white/35 outline-none transition focus:border-amber-400/70 focus:ring-2 focus:ring-amber-500/30"
-              />
+              <div className="relative">
+                <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-white/55">
+                  <User className="h-4 w-4" />
+                </span>
+                <input
+                  id="staff-username"
+                  name="username"
+                  type="text"
+                  autoComplete="username"
+                  required
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Enter username"
+                  className="w-full rounded-xl border border-white/20 bg-white/10 py-3 pl-10 pr-3.5 text-sm text-white placeholder:text-white/40 outline-none transition focus:border-amber-400/70 focus:ring-2 focus:ring-amber-500/30 sm:text-base"
+                />
+              </div>
             </div>
 
             <div>
-              <label htmlFor="staff-password" className="mb-1.5 block text-xs font-semibold text-white/90 sm:text-sm">
+              <label htmlFor="staff-password" className="mb-1.5 block text-sm font-semibold text-white/95">
                 Password
               </label>
               <div className="relative">
+                <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-white/55">
+                  <Lock className="h-4 w-4" />
+                </span>
                 <input
                   id="staff-password"
                   name="password"
@@ -134,22 +161,22 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter password"
-                  className="w-full rounded-lg border border-white/15 bg-white/10 px-3.5 py-2.5 pr-11 text-sm text-white placeholder:text-white/35 outline-none transition focus:border-amber-400/70 focus:ring-2 focus:ring-amber-500/30"
+                  className="w-full rounded-xl border border-white/20 bg-white/10 py-3 pl-10 pr-11 text-sm text-white placeholder:text-white/40 outline-none transition focus:border-amber-400/70 focus:ring-2 focus:ring-amber-500/30 sm:text-base"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                   aria-pressed={showPassword}
-                  className="absolute inset-y-0 right-0 flex items-center px-3 text-white/60 transition-colors hover:text-amber-400 focus:outline-none"
+                  className="absolute inset-y-0 right-0 flex items-center px-3.5 text-white/60 transition-colors hover:text-amber-400 focus:outline-none"
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? <EyeOff className="h-4.5 w-4.5" /> : <Eye className="h-4.5 w-4.5" />}
                 </button>
               </div>
             </div>
 
             {error && (
-              <div className="flex items-start gap-2 rounded-lg border border-red-400/30 bg-red-500/15 p-3 text-xs text-red-100 sm:text-sm">
+              <div className="flex items-start gap-2.5 rounded-xl border border-red-400/30 bg-red-500/15 p-3 text-sm text-red-100">
                 <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-300" />
                 <span>{error}</span>
               </div>
@@ -158,7 +185,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="group flex w-full items-center justify-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-amber-900/30 transition-all hover:bg-amber-400 hover:shadow-amber-700/30 focus:outline-none focus:ring-2 focus:ring-amber-400/50 disabled:cursor-not-allowed disabled:bg-white/20 disabled:text-white/50 disabled:shadow-none"
+              className="group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-orange-900/30 transition-all duration-200 hover:scale-[1.02] hover:from-amber-400 hover:via-orange-400 hover:to-amber-400 hover:shadow-orange-700/40 focus:outline-none focus:ring-2 focus:ring-amber-400/50 active:scale-[0.99] disabled:cursor-not-allowed disabled:from-stone-500 disabled:via-stone-500 disabled:to-stone-500 disabled:text-white/60 disabled:shadow-none disabled:hover:scale-100 sm:text-base"
             >
               {isSubmitting ? (
                 <>
@@ -168,14 +195,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               ) : (
                 <>
                   <span>Sign In to Staff Portal</span>
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </>
               )}
             </button>
 
             {demoMode && (
-              <div className="rounded-lg border border-amber-400/20 bg-amber-500/10 p-3 text-xs text-amber-50/95">
-                <strong className="text-amber-200">Demo Staff Credentials:</strong>
+              <div className="rounded-xl border border-amber-400/20 bg-amber-500/10 p-3.5 text-xs text-amber-50/95 sm:text-sm">
+                <strong className="text-amber-300">Demo Staff Credentials:</strong>
                 <div className="mt-1.5 space-y-0.5 text-white/85">
                   <div>
                     Manager: <code className="font-mono text-amber-100">manager</code> /{' '}
@@ -186,7 +213,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                     <code className="font-mono text-amber-100">kitchen123</code>
                   </div>
                 </div>
-                <div className="mt-2 text-[10px] leading-relaxed text-white/55 sm:text-[11px]">
+                <div className="mt-2 text-[11px] leading-relaxed text-white/60">
                   Only staff accounts can access the Admin and Kitchen portals. Customers ordering from a table QR code do
                   not need an account.
                 </div>
@@ -194,11 +221,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             )}
           </form>
 
-          <div className="mt-6 border-t border-white/10 pt-4 text-center">
+          <div className="mt-7 border-t border-white/15 pt-5 text-center">
             <button
               type="button"
               onClick={onReturnToCustomer}
-              className="text-sm font-medium text-white/75 transition-colors hover:text-amber-400"
+              className="text-sm font-medium text-white/80 transition-colors hover:text-amber-400 sm:text-base"
             >
               ← Continue as Guest (Customer Menu)
             </button>

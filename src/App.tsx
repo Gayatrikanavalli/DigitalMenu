@@ -177,6 +177,8 @@ export default function App() {
   }, []);
 
   const handleLogout = async () => {
+    const wasOnStaffView = activeView === 'admin' || activeView === 'kitchen';
+    const staffPath = activeView === 'kitchen' ? ROUTES.kitchen : ROUTES.admin;
     try {
       await auth.logout();
     } catch {
@@ -189,8 +191,9 @@ export default function App() {
     saveOrders([]);
     setConfirmedOrder(null);
     setStaffError('');
-    setPath(ROUTES.customer);
-    window.history.replaceState({}, '', ROUTES.customer);
+    const nextPath = wasOnStaffView ? staffPath : ROUTES.customer;
+    setPath(nextPath);
+    window.history.replaceState({}, '', nextPath);
     setLoginError('');
   };
 
@@ -433,15 +436,13 @@ export default function App() {
   if (isStaffView) {
     if (!isAuthenticated) {
       return (
-        <div className="min-h-screen bg-[#fafafb] flex items-center justify-center p-4 text-stone-900">
-          <LoginForm
-            intended={loginIntended}
-            onLogin={handleLogin}
-            onReturnToCustomer={() => navigate('/')}
-            error={loginError}
-            demoMode={demoMode}
-          />
-        </div>
+        <LoginForm
+          intended={loginIntended}
+          onLogin={handleLogin}
+          onReturnToCustomer={() => navigate('/')}
+          error={loginError}
+          demoMode={demoMode}
+        />
       );
     }
     if (requiresManager && !isManager) {
