@@ -177,8 +177,6 @@ export default function App() {
   }, []);
 
   const handleLogout = async () => {
-    const wasOnStaffView = activeView === 'admin' || activeView === 'kitchen';
-    const staffPath = activeView === 'kitchen' ? ROUTES.kitchen : ROUTES.admin;
     try {
       await auth.logout();
     } catch {
@@ -191,9 +189,8 @@ export default function App() {
     saveOrders([]);
     setConfirmedOrder(null);
     setStaffError('');
-    const nextPath = wasOnStaffView ? staffPath : ROUTES.customer;
-    setPath(nextPath);
-    window.history.replaceState({}, '', nextPath);
+    setPath(ROUTES.customer);
+    window.history.replaceState({}, '', ROUTES.customer);
     setLoginError('');
   };
 
