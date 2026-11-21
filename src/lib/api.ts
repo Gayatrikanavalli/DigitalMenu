@@ -26,6 +26,29 @@ import { MenuItem, Order, OrderStatus, RestaurantTable, CartItem, Category } fro
  *  - GET    /orders/kitchen_feed/
  */
 
+const getApiErrorMessage = (err: any, fallback: string): string => {
+  const status = err?.response?.status;
+  const data = err?.response?.data;
+  const detail =
+    (typeof data?.detail === 'string' && data.detail) ||
+    (typeof data?.error === 'string' && data.error) ||
+    (typeof data?.message === 'string' && data.message) ||
+    (Array.isArray(data?.non_field_errors) && typeof data.non_field_errors[0] === 'string' && data.non_field_errors[0]) ||
+    null;
+  if (detail) {
+    if (status === 403 && /csrf/i.test(detail)) {
+      return `CSRF/auth error: ${detail}. Refresh the page and sign in again.`;
+    }
+    if (status === 403) return `Permission denied: ${detail}`;
+    if (status === 401) return `Session expired: ${detail}`;
+    return detail;
+  }
+  if (status === 403) return 'Permission denied (403). Check staff login/permissions and CSRF configuration.';
+  if (status === 401) return 'Session expired (401). Please sign in again.';
+  if (status === 400) return 'Invalid request (400). Please check the data and try again.';
+  return err?.message || fallback;
+};
+
 const toAbsoluteImageUrl = (url?: string): string => {
   if (!url) return '';
   if (/^https?:\/\//i.test(url) || /^data:/i.test(url) || /^blob:/i.test(url)) return url;
@@ -106,42 +129,47 @@ export const api = {
   menu: {
     list: async (params?: { category?: string; food_type?: string; search?: string; include_inactive?: boolean; strict?: boolean }): Promise<MenuItem[]> => {
       const { strict, ...query } = params || {};
+      const mapItem = (item: any): MenuItem => ({
+        id: String(item.id),
+        name: item.name,
+        slug: item.slug,
+        category: item.category_slug || String(item.category),
+        description: item.description,
+        price: Number(item.price),
+        image: pickImage(item),
+        foodType: item.food_type,
+        isAvailable: item.is_available,
+        isActive: item.is_active,
+        isDeleted: item.is_deleted,
+        popularity: item.popularity || 0,
+        tags: item.tags || [],
+        orderCount: item.order_count || 0,
+        isPopular: item.is_popular,
+        isSpecial: item.is_special,
+        spiciness: item.spiciness,
+        preparationTimeMins: item.preparation_time_mins,
+        rating: 4.8,
+        reviewCount: 150,
+        discountPercentage: item.discount_percentage ?? 0,
+        offerActive: item.offer_active ?? false,
+        offerStartDate: item.offer_start_date ?? null,
+        offerEndDate: item.offer_end_date ?? null,
+        isOfferActive: item.is_offer_active ?? ((item.discount_percentage ?? 0) > 0),
+      });
       try {
         const response = await apiClient.get<any[]>('/menu/items', { params: Object.keys(query).length ? query : undefined });
         if (response.data && Array.isArray(response.data)) {
-          return response.data.map((item) => ({
-            id: String(item.id),
-            name: item.name,
-            slug: item.slug,
-            category: item.category_slug || String(item.category),
-            description: item.description,
-            price: Number(item.price),
-            image: pickImage(item),
-            foodType: item.food_type,
-            isAvailable: item.is_available,
-            isActive: item.is_active,
-            isDeleted: item.is_deleted,
-            popularity: item.popularity || 0,
-            tags: item.tags || [],
-            orderCount: item.order_count || 0,
-            isPopular: item.is_popular,
-            isSpecial: item.is_special,
-            spiciness: item.spiciness,
-            preparationTimeMins: item.preparation_time_mins,
-            rating: 4.8,
-            reviewCount: 150,
-            discountPercentage: item.discount_percentage ?? 0,
-            offerActive: item.offer_active ?? false,
-            offerStartDate: item.offer_start_date ?? null,
-            offerEndDate: item.offer_end_date ?? null,
-            isOfferActive: item.is_offer_active ?? ((item.discount_percentage ?? 0) > 0),
-          }));
+          const items = response.data.map(mapItem);
+          // Admin requests must never be masked by local cache fallback.
+          if (query.include_inactive) return items;
+          return items.filter((i) => !i.isDeleted && i.isActive !== false && i.isAvailable !== false);
         }
       } catch (err) {
-        if (strict) throw err;
-        // Fallback to cache buffer
+        if (strict || query.include_inactive) throw err;
+        // Fallback to cache buffer for customer-only reads
       }
-      return getMenuItems();
+      if (query.include_inactive) return [];
+      return getMenuItems().filter((i) => !i.isDeleted && i.isActive !== false && i.isAvailable !== false);
     },
 
     get: async (id: string): Promise<MenuItem | null> => {
@@ -368,6 +396,7 @@ export const api = {
       }
 
       try {
+        let response;
         if (imageFile) {
           const fd = new FormData();
           Object.entries(base).forEach(([k, v]) => {
@@ -380,29 +409,53 @@ export const api = {
             else fd.append(k, String(v));
           });
           fd.append('image', imageFile);
-          await apiClient.patch(`/menu/items/${id}`, fd, { timeout: 60000, headers: { 'Content-Type': 'multipart/form-data' } });
+          response = await apiClient.patch(`/menu/items/${id}`, fd, { timeout: 60000, headers: { 'Content-Type': 'multipart/form-data' } });
         } else {
-          await apiClient.patch(`/menu/items/${id}`, base, { timeout: 60000 });
+          response = await apiClient.patch(`/menu/items/${id}`, base, { timeout: 60000 });
+        }
+        const item = response?.data;
+        if (item && typeof item === 'object') {
+          return {
+            id: String(item.id ?? id),
+            name: item.name ?? updates.name,
+            slug: item.slug,
+            category: item.category_slug || String(item.category ?? updates.category ?? ''),
+            description: item.description ?? updates.description,
+            price: Number(item.price ?? updates.price ?? 0),
+            image: pickImage(item) || (updates.image !== undefined ? toAbsoluteImageUrl(updates.image) : undefined),
+            foodType: item.food_type ?? updates.foodType,
+            isAvailable: item.is_available ?? updates.isAvailable,
+            isActive: item.is_active ?? updates.isActive,
+            isDeleted: item.is_deleted ?? false,
+            popularity: item.popularity ?? 0,
+            tags: item.tags || updates.tags || [],
+            orderCount: item.order_count || 0,
+            isPopular: item.is_popular ?? updates.isPopular,
+            isSpecial: item.is_special ?? updates.isSpecial,
+            spiciness: item.spiciness ?? updates.spiciness,
+            preparationTimeMins: item.preparation_time_mins ?? updates.preparationTimeMins,
+            rating: 4.8,
+            reviewCount: 150,
+            discountPercentage: Number(item.discount_percentage ?? updates.discountPercentage ?? 0),
+            offerActive: item.offer_active ?? updates.offerActive ?? false,
+            offerStartDate: item.offer_start_date ?? updates.offerStartDate ?? null,
+            offerEndDate: item.offer_end_date ?? updates.offerEndDate ?? null,
+            isOfferActive: item.is_offer_active,
+          } as MenuItem;
         }
         return { id, ...updates } as MenuItem;
       } catch (err: any) {
-        const detail = err?.response?.data;
-        const fieldMsg = (val: any) => (Array.isArray(val) ? val[0] : typeof val === 'string' ? val : null);
-        let msg = fieldMsg(detail?.detail) || fieldMsg(detail?.non_field_errors);
-        if (!msg && detail && typeof detail === 'object') {
-          for (const [key, val] of Object.entries(detail)) {
-            const m = fieldMsg(val);
-            if (m) { msg = `${key}: ${m}`; break; }
-          }
-        }
-        msg = msg || err?.message || 'Failed to update dish.';
-        throw new Error(msg);
+        throw new Error(getApiErrorMessage(err, 'Failed to update dish.'));
       }
     },
 
     delete: async (id: string): Promise<boolean> => {
-      await apiClient.delete(`/menu/items/${id}`);
-      return true;
+      try {
+        await apiClient.delete(`/menu/items/${id}`);
+        return true;
+      } catch (err: any) {
+        throw new Error(getApiErrorMessage(err, 'Failed to delete dish.'));
+      }
     },
   },
 

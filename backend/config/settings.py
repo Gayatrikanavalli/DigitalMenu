@@ -17,7 +17,19 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-bhojan-qr-secret-ke
 
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,192.168.1.5,10.218.105.8,backend').split(',') if host.strip()]
+def _csv_env(name: str, default: str = ''):
+    return [v.strip() for v in os.getenv(name, default).split(',') if v.strip()]
+
+
+ALLOWED_HOSTS = _csv_env(
+    'ALLOWED_HOSTS',
+    'localhost,127.0.0.1,192.168.1.5,10.218.105.8,backend',
+)
+# Render/Vercel-hosted backends commonly expose a hostname env var.
+for _host_env in ('RENDER_EXTERNAL_HOSTNAME', 'DJANGO_ALLOWED_HOST'):
+    _host_val = os.getenv(_host_env, '').strip()
+    if _host_val and _host_val not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(_host_val)
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -126,32 +138,58 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': None,
 }
 
-# CSRF trusted origins for session-authenticated staff portals accessed from
-# the frontend (Next.js/Vite) on the laptop LAN IP and localhost.
-CSRF_TRUSTED_ORIGINS = [
-    origin.strip()
-    for origin in os.getenv(
-        'CSRF_TRUSTED_ORIGINS',
-        'http://localhost:3000,http://127.0.0.1:3000,http://192.168.1.5:3000,http://10.218.105.8:3000',
-    ).split(',')
-    if origin.strip()
-]
+# CSRF trusted origins for session-authenticated staff portals.
+# Production: set CSRF_TRUSTED_ORIGINS to the exact frontend origin(s), e.g.
+# https://your-app.vercel.app (comma-separated). Do not use unsafe wildcards.
+CSRF_TRUSTED_ORIGINS = _csv_env(
+    'CSRF_TRUSTED_ORIGINS',
+    'http://localhost:3000,http://127.0.0.1:3000,http://192.168.1.5:3000,http://10.218.105.8:3000',
+)
 
-# CORS settings for frontend connection
+# CORS settings for frontend connection. Keep credentials enabled for session auth.
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [origin.strip() for origin in os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:3000,http://127.0.0.1:3000,http://192.168.1.5:3000,http://10.218.105.8:3000').split(',') if origin.strip()]
+CORS_ALLOWED_ORIGINS = _csv_env(
+    'CORS_ALLOWED_ORIGINS',
+    'http://localhost:3000,http://127.0.0.1:3000,http://192.168.1.5:3000,http://10.218.105.8:3000',
+)
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
-# Public URL used in table QR codes (configurable via environment variable).
-# Set this to your laptop's LAN IP (e.g. http://192.168.1.5:3000) so phones
-# on the same Wi-Fi can open the link scanned from a table QR code.
+# Public URL used in table QR codes and as a trusted frontend origin.
 FRONTEND_PUBLIC_URL = os.getenv('FRONTEND_PUBLIC_URL', 'http://10.218.105.8:3000')
 NEXT_PUBLIC_BASE_URL = os.getenv('NEXT_PUBLIC_BASE_URL', '')
 
-# Ensure the configured frontend origin is always allowed for CORS and CSRF,
-# even if the explicit environment variables are not set on the host.
-_frontend_origin = FRONTEND_PUBLIC_URL.rstrip('/')
-if _frontend_origin and _frontend_origin not in CORS_ALLOWED_ORIGINS:
-    CORS_ALLOWED_ORIGINS = CORS_ALLOWED_ORIGINS + [_frontend_origin]
-if _frontend_origin and _frontend_origin not in CSRF_TRUSTED_ORIGINS:
-    CSRF_TRUSTED_ORIGINS = CSRF_TRUSTED_ORIGINS + [_frontend_origin]
+# Ensure configured frontend origins are always allowed for CORS and CSRF.
+for _origin_env in ('FRONTEND_PUBLIC_URL', 'NEXT_PUBLIC_BASE_URL', 'FRONTEND_URL'):
+    _frontend_origin = os.getenv(_origin_env, '').strip().rstrip('/')
+    if not _frontend_origin.startswith(('http://', 'https://')):
+        continue
+    if _frontend_origin not in CORS_ALLOWED_ORIGINS:
+        CORS_ALLOWED_ORIGINS.append(_frontend_origin)
+    if _frontend_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(_frontend_origin)
+
+# Production deployment behind HTTPS proxy (Render/Vercel-backed API).
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = os.getenv('USE_X_FORWARDED_HOST', 'True') == 'True'
+
+# Cookie settings for session-auth + CSRF across frontend/backend deployments.
+# For cross-site frontend (Vercel) -> backend (Render), SameSite=None and Secure
+# are required. Override via env if using same-site proxying.
+SESSION_COOKIE_SAMESITE = os.getenv('SESSION_COOKIE_SAMESITE', 'Lax' if DEBUG else 'None')
+CSRF_COOKIE_SAMESITE = os.getenv('CSRF_COOKIE_SAMESITE', 'Lax' if DEBUG else 'None')
+SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'False' if DEBUG else 'True') == 'True'
+CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE', 'False' if DEBUG else 'True') == 'True'
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = False  # frontend JS/axios reads csrftoken cookie for X-CSRFToken header
+CSRF_USE_SESSIONS = os.getenv('CSRF_USE_SESSIONS', 'False') == 'True'
