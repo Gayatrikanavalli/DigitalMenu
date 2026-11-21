@@ -58,6 +58,20 @@ class Command(BaseCommand):
                 user.groups.remove(kitchen_group)
                 user.groups.add(manager_group)
 
+            # Safe verification (no secrets/password/hash logged)
+            username_ok = username == "manager"
+            self.stdout.write(f"Bootstrap check - username is manager: {'PASS' if username_ok else 'FAIL'}")
+
+            mgr = User.objects.filter(username="manager").first()
+            exists_active = bool(mgr and mgr.is_active)
+            self.stdout.write(f"Bootstrap check - manager exists and active: {'PASS' if exists_active else 'FAIL'}")
+
+            pwd_ok = bool(mgr and mgr.check_password(password))
+            self.stdout.write(f"Bootstrap check - password matches: {'PASS' if pwd_ok else 'FAIL'}")
+
+            role_ok = bool(mgr and hasattr(mgr, "staff_profile") and mgr.staff_profile.role == StaffProfile.ROLE_MANAGER)
+            self.stdout.write(f"Bootstrap check - staff profile role manager: {'PASS' if role_ok else 'FAIL'}")
+
             # Non-sensitive confirmation only.
             self.stdout.write(self.style.SUCCESS("Manager bootstrap: completed."))
         except Exception as exc:
