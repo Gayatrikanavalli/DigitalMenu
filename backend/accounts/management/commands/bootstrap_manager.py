@@ -20,7 +20,7 @@ class Command(BaseCommand):
             return
 
         username = os.getenv("MANAGER_BOOTSTRAP_USERNAME", "").strip()
-        password = os.getenv("MANAGER_BOOTSTRAP_PASSWORD", "")
+        password = os.getenv("MANAGER_BOOTSTRAP_PASSWORD", "").strip()
         email = os.getenv("MANAGER_BOOTSTRAP_EMAIL", "").strip()
 
         # Validate without exposing secret values.
