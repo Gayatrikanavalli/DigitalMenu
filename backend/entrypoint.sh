@@ -14,6 +14,9 @@ echo "==> Running Django database migrations..."
 python manage.py makemigrations menu tables orders --noinput || true
 python manage.py migrate --noinput
 
+echo "==> Applying one-time manager bootstrap (if enabled)..."
+python manage.py bootstrap_manager
+
 echo "==> Seeding initial categories, tables, and dishes..."
 python manage.py loaddata initial_seed.json 2>/dev/null || echo "Seed data already loaded or skipped."
 
